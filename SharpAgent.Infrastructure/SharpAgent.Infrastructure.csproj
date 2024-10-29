@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.AI.DocumentIntelligence" Version="1.0.0-beta.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.0-rc.2.24474.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.0-rc.2.24474.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="OpenAI" Version="2.1.0-beta.1" />
     <PackageReference Include="Pinecone.Client" Version="1.0.0" />
   </ItemGroup>

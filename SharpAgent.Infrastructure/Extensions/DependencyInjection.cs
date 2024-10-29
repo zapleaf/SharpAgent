@@ -1,7 +1,12 @@
-﻿using SharpAgent.Infrastructure.Data;
+﻿using Microsoft.EntityFrameworkCore;
+
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+
+using SharpAgent.Application.IServices;
+
+using SharpAgent.Infrastructure.Data;
+using SharpAgent.Infrastructure.Services;
 using SharpAgent.Infrastructure.Seeders;
 
 // file-scoped namespace
@@ -24,6 +29,9 @@ public static class DependencyInjection
 
         // Any seed data can be placed in the AppSeeder class
         services.AddScoped<IAppSeeder, AppSeeder>();
+
+        // Register Azure Document Service
+        services.AddScoped<IDocumentAnalysisService, AzureDocumentService>();
 
         return services;
     }

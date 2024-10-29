@@ -37,7 +37,7 @@ internal class OpenAIEmbeddingService : IEmbeddingService
                 throw new ArgumentException("Inputs cannot be null or empty", nameof(inputs));
             }
 
-            _logger.LogInformation("Generating embeddings for {Count} inputs", inputs.Count);
+            _logger.LogInformation($"Generating embeddings for {inputs.Count} inputs");
 
             OpenAIEmbeddingCollection embeddings = (await _client.GenerateEmbeddingsAsync(inputs)).Value;
 
@@ -48,13 +48,13 @@ internal class OpenAIEmbeddingService : IEmbeddingService
                 vectors.Add(embedding.ToFloats());
             }
 
-            _logger.LogInformation("Successfully generated {Count} embeddings", vectors.Count);
+            _logger.LogInformation($"Successfully generated {vectors.Count} embeddings");
 
             return vectors;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error generating embeddings: {Message}", ex.Message);
+            _logger.LogError(ex, $"Error generating embeddings: {ex.Message}");
             throw;
         }
     }

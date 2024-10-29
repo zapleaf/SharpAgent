@@ -8,7 +8,7 @@ public interface IEntity
     DateTime CreatedAt { get; set; }
     
     string LastModifiedBy { get; set; }
-    DateTime? LastModifiedAt { get; set; }
+    DateTime LastModifiedAt { get; set; }
 
     bool IsDeleted { get; set; }
 }

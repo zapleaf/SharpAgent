@@ -4,3 +4,13 @@ GET {{SharpAgent.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+
+### Test Document Analysis - Extract Paragraphs from PDF
+POST {{SharpAgent.API_HostAddress}}/api/DocumentAnalysis/extract-paragraphs
+Content-Type: application/json
+
+{
+    "documentUrl": "https://www.uky.edu/ccd/sites/www.uky.edu.ccd/files/pawpaw.pdf"
+}
+        "Cooperative Extension Service | Agriculture and Natural Resources | Family and Consumer Sciences | 4-H Youth Development | Community and Economic Development",
