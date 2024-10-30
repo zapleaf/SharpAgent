@@ -1,4 +1,5 @@
 ﻿using SharpAgent.Domain.Common;
+using SharpAgent.Domain.Enums;
 
 namespace SharpAgent.Domain.Entities;
 
@@ -34,7 +35,7 @@ public class AgentTask : BaseEntity
     /// <summary>
     /// Current state of the task execution.
     /// </summary>
-    public TaskStatus Status { get; set; }
+    public Enums.TaskStatus Status { get; set; }
 
     /// <summary>
     /// Stores the task's execution results in structured JSON format.
