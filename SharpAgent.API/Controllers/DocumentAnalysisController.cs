@@ -21,7 +21,7 @@ namespace SharpAgent.API.Controllers
             _logger = logger;
         }
 
-        [HttpPost("extract-paragraphs")]
+        [HttpPost("extractparagraphs")]
         [ProducesResponseType(typeof(ExtractParagraphsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]

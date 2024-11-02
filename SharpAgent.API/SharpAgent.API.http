@@ -6,11 +6,20 @@ Accept: application/json
 ###
 
 
-### Test Document Analysis - Extract Paragraphs from PDF
-POST {{SharpAgent.API_HostAddress}}/api/DocumentAnalysis/extract-paragraphs
+### Send a basic chat completion request
+POST http://localhost:5291/api/chatcompletion/sendchatcompletion
+Content-Type: application/json
+
+        {
+            "role": "user",
+            "content": "How many alieans have visited Earth so far?"
+        }
+
+
+### Extract paragraphs from a PDF document
+POST http://localhost:5291/api/documentanalysis/extractparagraphs
 Content-Type: application/json
 
 {
     "documentUrl": "https://www.uky.edu/ccd/sites/www.uky.edu.ccd/files/pawpaw.pdf"
 }
-        "Cooperative Extension Service | Agriculture and Natural Resources | Family and Consumer Sciences | 4-H Youth Development | Community and Economic Development",

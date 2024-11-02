@@ -8,6 +8,9 @@ using SharpAgent.Application.IServices;
 using SharpAgent.Infrastructure.Data;
 using SharpAgent.Infrastructure.Services;
 using SharpAgent.Infrastructure.Seeders;
+using Pinecone.Grpc;
+using SharpAgent.Application.IRepositories;
+using SharpAgent.Infrastructure.Repositories;
 
 // file-scoped namespace
 namespace SharpAgent.Infrastructure.Extensions;
@@ -30,8 +33,14 @@ public static class DependencyInjection
         // Any seed data can be placed in the AppSeeder class
         services.AddScoped<IAppSeeder, AppSeeder>();
 
-        // Register Azure Document Service
+        // Register Services
         services.AddScoped<IDocumentAnalysisService, AzureDocumentService>();
+        services.AddScoped<IOpenAIChatService, OpenAIChatService>();
+        services.AddTransient<IEmbeddingService, OpenAIEmbeddingService>();
+        services.AddTransient<IVectorDbService, PineconeService>();
+
+        // Register Repositories
+        services.AddTransient<IWorkflowRepository, WorkflowRepository>();
 
         return services;
     }

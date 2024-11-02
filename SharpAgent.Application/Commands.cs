@@ -4,13 +4,6 @@ using SharpAgent.Domain.Attributes;
 
 namespace SharpAgent.Application.Commands;
 
-[ServiceCommand("DocumentAnalysis")]
-public record ProcessDocumentCommand : IRequest<ProcessDocumentResult>
-{
-    public string DocumentUrl { get; init; }
-    public Guid WorkflowId { get; init; }
-}
-
 [ServiceCommand("Embedding")]
 public record CreateEmbeddingsCommand : IRequest<CreateEmbeddingsResult>
 {
