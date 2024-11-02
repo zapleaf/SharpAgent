@@ -1,4 +1,4 @@
-﻿namespace SharpAgent.API.Model.Chat;
+﻿namespace SharpAgent.API.Models.Chat;
 
 public class ChatCompletionRequest
 {

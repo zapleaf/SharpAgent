@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SharpAgent.API.Model.Chat;
+using SharpAgent.API.Models.Chat;
 using SharpAgent.Application.ChatCompletion.Queries.SendChatCompletion;
 
 namespace SharpAgent.API.Controllers;

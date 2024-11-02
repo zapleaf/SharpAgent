@@ -1,4 +1,4 @@
-﻿namespace SharpAgent.API.Model.DocumentAnalysis;
+﻿namespace SharpAgent.API.Models.DocumentAnalysis;
 
 public class ExtractParagraphsRequest
 {
