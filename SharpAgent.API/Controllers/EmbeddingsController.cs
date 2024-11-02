@@ -1,39 +1,38 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SharpAgent.API.Requests;
-using SharpAgent.Application.ChatCompletion.Queries.SendChatCompletion;
+using SharpAgent.Application.Embeddings.Queries.CreateEmbeddings;
 
 namespace SharpAgent.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ChatCompletionController : ControllerBase
+public class EmbeddingsController : ControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly ILogger<ChatCompletionController> _logger;
+    private readonly ILogger<EmbeddingsController> _logger;
 
-    public ChatCompletionController(
+    public EmbeddingsController(
         IMediator mediator,
-        ILogger<ChatCompletionController> logger)
+        ILogger<EmbeddingsController> logger)
     {
         _mediator = mediator;
         _logger = logger;
     }
 
-    [HttpPost("sendchatcompletion")]
-    [ProducesResponseType(typeof(SendChatCompletionResponse), StatusCodes.Status200OK)]
+    [HttpPost("create")]
+    [ProducesResponseType(typeof(CreateEmbeddingsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<SendChatCompletionResponse>> SendChatCompletion(
-        [FromBody] ChatCompletionRequest request,
+    public async Task<ActionResult<CreateEmbeddingsResponse>> CreateEmbeddings(
+        [FromBody] CreateEmbeddingsRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
-            var query = new SendChatCompletionQuery
+            var query = new CreateEmbeddingsQuery
             {
-                Content = request.Content,
-                Role = request.Role
+                TextSections = request.TextSections
             };
 
             var response = await _mediator.Send(query, cancellationToken);
@@ -41,7 +40,7 @@ public class ChatCompletionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error processing chat completion request");
+            _logger.LogError(ex, "Error processing embeddings request");
             throw;
         }
     }

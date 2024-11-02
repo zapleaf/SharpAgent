@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
-using SharpAgent.API.Models.DocumentAnalysis;
+using SharpAgent.API.Requests;
 using SharpAgent.Application.DocumentAnalysis.Queries.ExtractParagraphs;
 
 namespace SharpAgent.API.Controllers

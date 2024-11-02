@@ -7,7 +7,7 @@ Accept: application/json
 
 
 ### Send a basic chat completion request
-POST http://localhost:5291/api/chatcompletion/sendchatcompletion
+POST {{SharpAgent.API_HostAddress}}/api/chatcompletion/sendchatcompletion
 Content-Type: application/json
 
         {
@@ -17,9 +17,22 @@ Content-Type: application/json
 
 
 ### Extract paragraphs from a PDF document
-POST http://localhost:5291/api/documentanalysis/extractparagraphs
+POST {{SharpAgent.API_HostAddress}}/api/documentanalysis/extractparagraphs
 Content-Type: application/json
 
 {
     "documentUrl": "https://www.uky.edu/ccd/sites/www.uky.edu.ccd/files/pawpaw.pdf"
+}
+
+
+### Create Embeddings
+POST {{SharpAgent.API_HostAddress}}/api/embeddings/create
+Content-Type: application/json
+
+{
+    "textSections": [
+        "This is the first section to embed",
+        "This is another section that needs embedding",
+        "And here's a third section for good measure"
+    ]
 }
