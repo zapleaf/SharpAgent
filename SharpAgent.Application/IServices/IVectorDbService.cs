@@ -4,5 +4,5 @@ namespace SharpAgent.Application.IServices;
 
 public interface IVectorDbService
 {
-    Task UpsertVectors(List<EmbeddingVector> embeddings, string vectorNamespace);
+    Task<uint> UpsertVectors(List<EmbeddingVector> embeddings, string vectorNamespace);
 }

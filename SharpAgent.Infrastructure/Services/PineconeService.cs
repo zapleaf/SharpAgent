@@ -27,10 +27,12 @@ namespace SharpAgent.Infrastructure.Services
             _indexClient = _pineconeClient.Index(_config["Pinecone:Index"]);
         }
 
-        public async Task UpsertVectors(List<EmbeddingVector> embeddings, string vectorNamespace)
+        public async Task<uint> UpsertVectors(List<EmbeddingVector> embeddings, string vectorNamespace)
         {
             var pineconeVectors = ConvertVectors(embeddings);
-            await UpsertVectors(pineconeVectors, vectorNamespace);
+            var count = await UpsertVectors(pineconeVectors, vectorNamespace);
+
+            return count;
         }
 
         private static List<Vector> ConvertVectors(List<EmbeddingVector> embeddings)
