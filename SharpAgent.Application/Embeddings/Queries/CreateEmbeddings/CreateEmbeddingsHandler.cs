@@ -22,9 +22,7 @@ public class CreateEmbeddingsHandler
         _logger = logger;
     }
 
-    public async Task<CreateEmbeddingsResponse> Handle(
-        CreateEmbeddingsQuery request,
-        CancellationToken ct)
+    public async Task<CreateEmbeddingsResponse> Handle(CreateEmbeddingsQuery request, CancellationToken ct)
     {
         try
         {

@@ -362,3 +362,6 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /SharpAgent.API/appsettings.Development.json
+/SharpAgent.API/appsettings.json
+/SharpAgent.API/appsettings.debug.json
+/SharpAgent.API/appsettings.development.json

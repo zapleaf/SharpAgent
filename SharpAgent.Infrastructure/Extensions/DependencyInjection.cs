@@ -4,13 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
 using SharpAgent.Application.IServices;
+using SharpAgent.Application.IRepositories;
+
+using SharpAgent.Domain.Entities;
 
 using SharpAgent.Infrastructure.Data;
 using SharpAgent.Infrastructure.Services;
 using SharpAgent.Infrastructure.Seeders;
-using Pinecone.Grpc;
-using SharpAgent.Application.IRepositories;
 using SharpAgent.Infrastructure.Repositories;
+
 
 // file-scoped namespace
 namespace SharpAgent.Infrastructure.Extensions;
@@ -32,6 +34,9 @@ public static class DependencyInjection
 
         // Any seed data can be placed in the AppSeeder class
         services.AddScoped<IAppSeeder, AppSeeder>();
+
+        // Matching Endpoints are added in the Program.cs file of the API
+        services.AddIdentityApiEndpoints<User>().AddEntityFrameworkStores<AppDbContext>();
 
         // Register Services
         services.AddScoped<IDocumentAnalysisService, AzureDocumentService>();

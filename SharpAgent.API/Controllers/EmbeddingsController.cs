@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharpAgent.API.Requests;
 using SharpAgent.Application.Embeddings.Queries.CreateEmbeddings;
@@ -7,14 +8,13 @@ namespace SharpAgent.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class EmbeddingsController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ILogger<EmbeddingsController> _logger;
 
-    public EmbeddingsController(
-        IMediator mediator,
-        ILogger<EmbeddingsController> logger)
+    public EmbeddingsController(IMediator mediator, ILogger<EmbeddingsController> logger)
     {
         _mediator = mediator;
         _logger = logger;
@@ -24,9 +24,7 @@ public class EmbeddingsController : ControllerBase
     [ProducesResponseType(typeof(CreateEmbeddingsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<CreateEmbeddingsResponse>> CreateEmbeddings(
-        [FromBody] CreateEmbeddingsRequest request,
-        CancellationToken cancellationToken)
+    public async Task<ActionResult<CreateEmbeddingsResponse>> CreateEmbeddings([FromBody] CreateEmbeddingsRequest request, CancellationToken cancellationToken)
     {
         try
         {

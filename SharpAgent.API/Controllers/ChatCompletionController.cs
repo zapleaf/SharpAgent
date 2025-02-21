@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharpAgent.API.Requests;
 using SharpAgent.Application.ChatCompletion.Queries.SendChatCompletion;
@@ -7,14 +8,13 @@ namespace SharpAgent.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ChatCompletionController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ILogger<ChatCompletionController> _logger;
 
-    public ChatCompletionController(
-        IMediator mediator,
-        ILogger<ChatCompletionController> logger)
+    public ChatCompletionController(IMediator mediator, ILogger<ChatCompletionController> logger)
     {
         _mediator = mediator;
         _logger = logger;
@@ -24,9 +24,7 @@ public class ChatCompletionController : ControllerBase
     [ProducesResponseType(typeof(SendChatCompletionResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-    public async Task<ActionResult<SendChatCompletionResponse>> SendChatCompletion(
-        [FromBody] ChatCompletionRequest request,
-        CancellationToken cancellationToken)
+    public async Task<ActionResult<SendChatCompletionResponse>> SendChatCompletion([FromBody] ChatCompletionRequest request, CancellationToken cancellationToken)
     {
         try
         {
