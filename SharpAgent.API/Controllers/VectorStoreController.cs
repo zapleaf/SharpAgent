@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharpAgent.API.Requests;
 using SharpAgent.Application.VectorStore.Commands.StoreVectors;
@@ -8,6 +9,7 @@ namespace SharpAgent.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class VectorStoreController : ControllerBase
 {
     private readonly IMediator _mediator;

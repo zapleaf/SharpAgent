@@ -2,6 +2,8 @@ using SharpAgent.Infrastructure.Extensions;
 using SharpAgent.Infrastructure.Seeders;
 using SharpAgent.Application.Extensions;
 using SharpAgent.API.Middlewares;
+using SharpAgent.Domain.Entities;
+using Microsoft.OpenApi.Models;
 
 namespace SharpAgent.API
 {
@@ -11,20 +13,33 @@ namespace SharpAgent.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddAuthentication();
+
             // Add services to the container.
             builder.Services.AddControllers();
 
-            //// Logging is included by default in WebApplicationBuilder
-            //// But you can configure it further:
-            //builder.Logging.ClearProviders();
-            //builder.Logging.AddConsole();
-            //builder.Logging.AddDebug();
-
-            //// Optional: Set minimum log level
-            //builder.Logging.SetMinimumLevel(LogLevel.Information);
-
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                // Add the Authorize button to swagger
+                c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+                {
+                    Type = SecuritySchemeType.Http,
+                    Scheme = "Bearer"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            // "bearerAuth" references the Security Definition above 
+                            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "bearerAuth"}
+                        },
+                        []
+                    }
+                });
+            });
 
             // Injecting our error handling middleware (step 1 of 2)
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
@@ -41,8 +56,6 @@ namespace SharpAgent.API
 
             await seeder.Seed();
 
-            // Configure the HTTP request pipeline.
-
             // Adding error handling 1st in our request pipeline (step 2 of 2)
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
@@ -54,8 +67,11 @@ namespace SharpAgent.API
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            // Exposes Identity Endpoints
+            // Prefix each of the Identity endpoints with "identity"
+            app.MapGroup("api/identity").MapIdentityApi<User>();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharpAgent.Application.Commands;
 
@@ -8,23 +9,20 @@ public class WorkFlowController : Controller
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class WorkflowController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly ILogger<WorkflowController> _logger;
 
-        public WorkflowController(
-            IMediator mediator,
-            ILogger<WorkflowController> logger)
+        public WorkflowController(IMediator mediator, ILogger<WorkflowController> logger)
         {
             _mediator = mediator;
             _logger = logger;
         }
 
         [HttpPost("{workflowId}")]
-        public async Task<IActionResult> ExecuteWorkflow(
-            Guid workflowId,
-            [FromBody] object? parameters = null)
+        public async Task<IActionResult> ExecuteWorkflow(Guid workflowId, [FromBody] object? parameters = null)
         {
             try
             {

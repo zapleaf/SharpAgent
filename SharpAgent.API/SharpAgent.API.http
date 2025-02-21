@@ -1,23 +1,34 @@
-@SharpAgent.API_HostAddress = http://localhost:5291
+@HostAddress = http://localhost:5291
+@token = CfDJ8DK9Y9eGQWFHkrsmFi5sg5pYaFnySL-u2FLuERjW7KqkScyBMDQW3DLqw2WVlqtYeoMjyBa14ipad8NjmOcw6Ilb733z8zJK2563VsaHsMZvdWaD2ECvaXl67xC8DeuxMRB36xYFSda-Zf5kHviK58COfgeQhIn6u8SHX-LoGPqqVt4QRkIpklYeD_LvAdb2t6Y6THqRYA1A6BWgU--setN5OLd0ENz1Ou_xzmUpja0UoJN5627I00rp7x-kLhHRlDNg3tGYB9VpanGSudYqC9oAzPQeOquOx2e2fxlp-U212oOFZTwklEGmJ7eMoyK4zlOoB1O94xUaMh6PqHUUWa7HpDzI5oNhw_5bfW_CoYANYo1F1IrREOEgmqeiKVt5VA2dEhN9Z83QHbHGBIR-ZAEIsv8egotlq93bHiCPkmnIcDgXL5qMd153frI9gcPRL4VLslAC66514k9LOa8IpZClltj-ck7Vuxk00MV0C8Rdpzbod2bwIF18D-6tL4aCuv-dqshL3aOW6fODEcB1uqyN4GWTJ2s-uynz5hPvQlsNY2C5UsOiirTknepuWlm7tL_8BFW3C_JX_mmLq_0LxMSc45IDu2CHMtpxf1xl0MA8IUAdGs19coqCGPTR60QgFDnlKCSrxeVgyafAeWDeECEb_3eAIb0YbLdUZEcfQ1DWIoA5OE3pUNVUYo97BSC4HQ
 
-GET {{SharpAgent.API_HostAddress}}/weatherforecast/
-Accept: application/json
+### register a user
+POST {{HostAddress}}/api/identity/register
+Content-Type: application/json
+{
+  "email": "testuser@test.com",
+  "password": "345Wordy!"
+}
 
-###
-
+### login endpoint
+POST {{HostAddress}}/api/identity/login
+Content-Type: application/json
+{
+  "email": "testuser@test.com",
+  "password": "345Wordy!"
+}
 
 ### Send a basic chat completion request
-POST {{SharpAgent.API_HostAddress}}/api/chatcompletion/sendchatcompletion
+POST {{HostAddress}}/api/chatcompletion/sendchatcompletion
 Content-Type: application/json
 
-        {
-            "role": "user",
-            "content": "How many alieans have visited Earth so far?"
-        }
+{
+  "role": "user",
+  "content": "How many alieans have visited Earth so far?"
+}
 
 
 ### Extract paragraphs from a PDF document
-POST {{SharpAgent.API_HostAddress}}/api/documentanalysis/extractparagraphs
+POST {{HostAddress}}/api/documentanalysis/extractparagraphs
 Content-Type: application/json
 
 {
@@ -26,9 +37,8 @@ Content-Type: application/json
 
 
 ### Create Embeddings
-POST {{SharpAgent.API_HostAddress}}/api/embeddings/create
-Content-Type: application/json
-
+POST {{HostAddress}}/api/embeddings/create
+Authorization: Bearer {{token}}
 {
     "textSections": [
         "This is the first section to embed",
@@ -38,7 +48,7 @@ Content-Type: application/json
 
 
 ### Test successful vector storage with minimal data
-POST {{SharpAgent.API_HostAddress}}/api/vectorstore/store
+POST {{HostAddress}}/api/vectorstore/store
 Content-Type: application/json
 
 {
