@@ -20,6 +20,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     internal DbSet<EmbeddingModel> EmbeddingModels => Set<EmbeddingModel>();
     internal DbSet<EmbeddingTag> EmbeddingTags => Set<EmbeddingTag>();
     internal DbSet<EmbeddingCollection> EmbeddingCollections => Set<EmbeddingCollection>();
+    internal DbSet<Channel> Channels => Set<Channel>();
+    internal DbSet<Video> Videos => Set<Video>();
+    internal DbSet<Category> Categories => Set<Category>();
+    internal DbSet<AiSummary> AiSummaries => Set<AiSummary>();
+    internal DbSet<AiAnalysis> AiAnalyses => Set<AiAnalysis>();
+    internal DbSet<PromptVersion> PromptVersions => Set<PromptVersion>();
+
 
     public override int SaveChanges()
     {
@@ -171,6 +178,48 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
         modelBuilder.Entity<EmbeddingModel>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<EmbeddingTag>().HasQueryFilter(e => !e.IsDeleted);
         modelBuilder.Entity<EmbeddingCollection>().HasQueryFilter(e => !e.IsDeleted);
+
+        // Configure Channel
+        modelBuilder.Entity<Channel>()
+            .HasIndex(c => c.YTId)
+            .IsUnique();
+
+        // Configure Video
+        modelBuilder.Entity<Video>()
+            .HasIndex(v => v.YTId)
+            .IsUnique();
+
+        // navigation setup for the Video-Channel relationship
+        // Simplified relationship using just YTId
+        modelBuilder.Entity<Video>()
+            .HasOne(v => v.Channel)
+            .WithMany(c => c.Videos)
+            .HasForeignKey(v => v.YTChannelId)
+            .HasPrincipalKey(c => c.YTId);
+
+        // Configure many-to-many relationship between Channel and Category
+        modelBuilder.Entity<Channel>()
+            .HasMany(c => c.Categories)
+            .WithMany(c => c.Channels);
+
+        // Configure PromptVersion
+        modelBuilder.Entity<PromptVersion>()
+            .HasIndex(p => new { p.Code, p.Version })
+            .IsUnique();
+
+        // Configure AiSummary relationship with PromptVersion
+        modelBuilder.Entity<AiSummary>()
+            .HasOne(s => s.PromptVersion)
+            .WithMany(p => p.AiSummaries)
+            .HasForeignKey(s => s.PromptVersionId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Configure AiAnalysis relationship with PromptVersion
+        modelBuilder.Entity<AiAnalysis>()
+            .HasOne(a => a.PromptVersion)
+            .WithMany(p => p.AiAnalyses)
+            .HasForeignKey(a => a.PromptVersionId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         base.OnModelCreating(modelBuilder);
     }
