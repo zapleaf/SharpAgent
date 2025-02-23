@@ -9,6 +9,12 @@ namespace SharpAgent.Infrastructure.Data;
 // The "Primary Constructor" allows us to place parameters to be specified directly in the class declaration.
 // Using DbContextOptions allows options to be configured at a higher level like in the program.cs
 // of the Presentation layer using the appsetting.json configuration
+
+// Connection string set in AppSettings, called in Program.cs, and passed here via "options"
+// Create a new migration
+//    1.) Using Package manager Console
+//    2.) "add-migration <name>" creates the Migrations folder and migration class
+//    3.) "update-database" updates database
 public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbContext<User>(options)
 {
     // The standard constructor (commented below) is replaced by the primary constructor syntax above.

@@ -14,7 +14,7 @@ public class AiAnalysisRepository : Repository<AiAnalysis>, IAiAnalysisRepositor
         _context = context;
     }
 
-    public async Task<IEnumerable<AiAnalysis>> GetByChannelId(int channelId)
+    public async Task<IEnumerable<AiAnalysis>> GetByChannelId(Guid channelId)
     {
         return await _context.AiAnalyses
             .Where(a => a.ChannelId == channelId && !a.IsDeleted)
@@ -22,7 +22,7 @@ public class AiAnalysisRepository : Repository<AiAnalysis>, IAiAnalysisRepositor
             .ToListAsync();
     }
 
-    public async Task<AiAnalysis?> GetMostRecentByChannelId(int channelId)
+    public async Task<AiAnalysis?> GetMostRecentByChannelId(Guid channelId)
     {
         return await _context.AiAnalyses
             .Where(a => a.ChannelId == channelId && !a.IsDeleted)

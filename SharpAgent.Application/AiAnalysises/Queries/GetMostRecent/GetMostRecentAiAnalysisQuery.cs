@@ -6,5 +6,5 @@ namespace SharpAgent.Application.AiAnalysises.Queries.GetMostRecent;
 
 public class GetMostRecentAiAnalysisQuery : IRequest<AiAnalysisDto?>
 {
-    public int ChannelId { get; set; }
+    public Guid ChannelId { get; set; }
 }

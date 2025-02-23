@@ -6,11 +6,11 @@ namespace SharpAgent.Domain.Entities;
 public class AiSummary : BaseEntity
 {
     [Required]
-    public int VideoId { get; set; }
+    public Guid VideoId { get; set; }
     public virtual Video Video { get; set; } = null!;
 
     [Required]
-    public int PromptVersionId { get; set; }
+    public Guid PromptVersionId { get; set; }
     public virtual PromptVersion PromptVersion { get; set; } = null!;
 
     [Required]

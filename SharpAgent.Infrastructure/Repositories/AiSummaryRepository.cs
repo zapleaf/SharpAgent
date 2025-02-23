@@ -14,7 +14,7 @@ public class AiSummaryRepository : Repository<AiSummary>, IAiSummaryRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<AiSummary>> GetByVideoId(int videoId)
+    public async Task<IEnumerable<AiSummary>> GetByVideoId(Guid videoId)
     {
         return await _context.AiSummaries
             .Where(s => s.VideoId == videoId && !s.IsDeleted)
@@ -22,7 +22,7 @@ public class AiSummaryRepository : Repository<AiSummary>, IAiSummaryRepository
             .ToListAsync();
     }
 
-    public async Task<AiSummary?> GetMostRecentByVideoId(int videoId)
+    public async Task<AiSummary?> GetMostRecentByVideoId(Guid videoId)
     {
         return await _context.AiSummaries
             .Where(s => s.VideoId == videoId && !s.IsDeleted)

@@ -7,11 +7,11 @@ namespace SharpAgent.Domain.Entities;
 public class AiAnalysis : BaseEntity
 {
     [Required]
-    public int ChannelId { get; set; }
+    public Guid ChannelId { get; set; }
     public virtual Channel Channel { get; set; } = null!;
 
     [Required]
-    public int PromptVersionId { get; set; }
+    public Guid PromptVersionId { get; set; }
     public virtual PromptVersion PromptVersion { get; set; } = null!;
 
     [Required]
