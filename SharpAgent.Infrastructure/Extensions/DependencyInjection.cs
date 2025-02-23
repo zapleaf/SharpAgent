@@ -12,6 +12,7 @@ using SharpAgent.Infrastructure.Data;
 using SharpAgent.Infrastructure.Services;
 using SharpAgent.Infrastructure.Seeders;
 using SharpAgent.Infrastructure.Repositories;
+using SharpAgent.Domain.Common;
 
 
 // file-scoped namespace
@@ -43,6 +44,20 @@ public static class DependencyInjection
         services.AddScoped<IOpenAIChatService, OpenAIChatService>();
         services.AddTransient<IEmbeddingService, OpenAIEmbeddingService>();
         services.AddTransient<IVectorDbService, PineconeService>();
+
+        // Register Repositories
+        services.AddScoped<IVideoRepository, VideoRepository>();
+        services.AddScoped<IChannelRepository, ChannelRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IAiSummaryRepository, AiSummaryRepository>();
+        services.AddScoped<IAiAnalysisRepository, AiAnalysisRepository>();
+        services.AddScoped<IPromptVersionRepository, PromptVersionRepository>();
+
+        // Get YouTube API key from settings and register the YouTube Service
+        services.Configure<YouTubeApiKey>(configuration.GetSection("YouTubeApiKey"));
+        var youtubeApiKey = configuration.GetSection("YouTubeApiKey").Get<YouTubeApiKey>();
+        services.AddSingleton<YouTubeApiKey>(youtubeApiKey);
+        services.AddScoped<IYouTubeApiService, YouTubeApiService>();
 
         // Register Repositories
         services.AddTransient<IWorkflowRepository, WorkflowRepository>();
