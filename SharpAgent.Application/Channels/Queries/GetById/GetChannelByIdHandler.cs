@@ -5,7 +5,7 @@ using MediatR;
 
 namespace SharpAgent.Application.Channels.Queries.GetById;
 
-public class GetChannelByIdHandler : IRequestHandler<GetChannelByIdQuery, ChannelDto>
+public class GetChannelByIdHandler : IRequestHandler<GetChannelByIdQuery, ChannelResponse>
 {
     private readonly IChannelRepository _channelRepository;
     private readonly IMapper _mapper;
@@ -16,9 +16,9 @@ public class GetChannelByIdHandler : IRequestHandler<GetChannelByIdQuery, Channe
         _mapper = mapper;
     }
 
-    public async Task<ChannelDto> Handle(GetChannelByIdQuery request, CancellationToken cancellationToken)
+    public async Task<ChannelResponse> Handle(GetChannelByIdQuery request, CancellationToken cancellationToken)
     {
         var channel = await _channelRepository.Get(request.Id);
-        return _mapper.Map<ChannelDto>(channel);
+        return _mapper.Map<ChannelResponse>(channel);
     }
 }

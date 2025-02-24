@@ -3,7 +3,7 @@ using SharpAgent.Application.Videos.Common;
 
 namespace SharpAgent.Application.Channels.Common;
 
-public class ChannelDto
+public class ChannelResponse
 {
     public Guid Id { get; set; }
     public string YTId { get; set; } = string.Empty;
@@ -18,6 +18,6 @@ public class ChannelDto
 
     public int AvgViews { get; set; }
     public int TrackedVideos { get; set; } = 0;
-    public List<CategoryDto> Categories { get; set; } = new();
-    public List<VideoDto> Videos { get; set; } = new();
+    public List<CategoryResponse> Categories { get; set; } = new();
+    public List<VideoResponse> Videos { get; set; } = new();
 }

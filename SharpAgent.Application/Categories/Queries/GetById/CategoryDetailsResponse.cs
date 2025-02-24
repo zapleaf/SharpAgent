@@ -2,7 +2,7 @@
 
 namespace SharpAgent.Application.Categories.Queries.GetById;
 
-public class CategoryDetailsDto
+public class CategoryDetailsResponse
 {
     public int Id { get; set; }
     public string? Name { get; set; }
@@ -12,5 +12,5 @@ public class CategoryDetailsDto
     public string? CreatedBy { get; set; }
     public DateTime LastModifiedAt { get; set; }
     public string? LastModifiedBy { get; set; }
-    public List<CategoryChannelDto> Channels { get; set; } = new();
+    public List<CategoryChannelResponse> Channels { get; set; } = new();
 }

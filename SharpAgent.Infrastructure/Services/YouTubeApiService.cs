@@ -35,7 +35,7 @@ public class YouTubeApiService : IYouTubeApiService
         });
     }
 
-    public async Task<List<ChannelDto>> ChannelSearch(string searchTerm)
+    public async Task<List<ChannelResponse>> ChannelSearch(string searchTerm)
     {
         var searchListRequest = _youTubeService.Search.List("snippet");
         searchListRequest.Q = searchTerm;
@@ -63,7 +63,7 @@ public class YouTubeApiService : IYouTubeApiService
             channels.Add(channel);
         }
 
-        return _mapper.Map<List<ChannelDto>>(channels);
+        return _mapper.Map<List<ChannelResponse>>(channels);
     }
 
     public async Task<List<Video>> VideoSearch(string searchTerm, DateTime? startDate = null)

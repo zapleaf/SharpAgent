@@ -9,7 +9,7 @@ public class AiSummaryMappingProfile : Profile
 {
     public AiSummaryMappingProfile()
     {
-        CreateMap<AiSummary, AiSummaryDto>();
+        CreateMap<AiSummary, AiSummaryResponse>();
         CreateMap<CreateAiSummaryCommand, AiSummary>();
     }
 }

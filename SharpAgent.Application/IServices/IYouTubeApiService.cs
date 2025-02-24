@@ -5,7 +5,7 @@ namespace SharpAgent.Application.IServices;
 
 public interface IYouTubeApiService
 {
-    Task<List<ChannelDto>> ChannelSearch(string searchTerm);
+    Task<List<ChannelResponse>> ChannelSearch(string searchTerm);
     Task<Channel> GetChannelStats(string youTubeId);
     Task<Video> GetStats(Video video);
     Task<int?> GetDuration(string youTubeId);

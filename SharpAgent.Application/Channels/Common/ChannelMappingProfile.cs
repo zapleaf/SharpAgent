@@ -7,12 +7,12 @@ public class ChannelMappingProfile : Profile
 {
     public ChannelMappingProfile()
     {
-        CreateMap<Channel, ChannelDto>()
+        CreateMap<Channel, ChannelResponse>()
             .ForMember(dest => dest.Videos,
                 opt => opt.MapFrom(src => src.Videos.Where(v => !v.IsDeleted)))
             .ForMember(dest => dest.TrackedVideos,
                 opt => opt.MapFrom(src => src.Videos.Count(v => !v.IsDeleted)));
 
-        CreateMap<ChannelDto, Channel>();
+        CreateMap<ChannelResponse, Channel>();
     }
 }

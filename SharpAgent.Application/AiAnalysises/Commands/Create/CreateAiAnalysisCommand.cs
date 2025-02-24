@@ -4,7 +4,7 @@ using SharpAgent.Application.AiAnalysises.Common;
 
 namespace SharpAgent.Application.AiAnalysises.Commands.Create;
 
-public class CreateAiAnalysisCommand : IRequest<AiAnalysisDto>
+public class CreateAiAnalysisCommand : IRequest<AiAnalysisResponse>
 {
     public int ChannelId { get; set; }
     public string AnalysisType { get; set; } = string.Empty;

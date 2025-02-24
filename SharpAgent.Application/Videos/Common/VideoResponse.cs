@@ -1,6 +1,6 @@
 ﻿namespace SharpAgent.Application.Videos.Common;
 
-public class VideoDto
+public class VideoResponse
 {
     public int Id { get; set; }
     public string YTId { get; set; } = string.Empty;

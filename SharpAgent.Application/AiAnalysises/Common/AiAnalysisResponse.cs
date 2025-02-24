@@ -1,13 +1,13 @@
-﻿namespace SharpAgent.Application.AiSummaries.Common;
+﻿namespace SharpAgent.Application.AiAnalysises.Common;
 
-public class AiSummaryDto
+public class AiAnalysisResponse
 {
     public int Id { get; set; }
-    public int VideoId { get; set; }
+    public int ChannelId { get; set; }
+    public string AnalysisType { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Prompt { get; set; } = string.Empty;
-    public string Summary { get; set; } = string.Empty;
-    public string Transcript { get; set; } = string.Empty;
+    public string Analysis { get; set; } = string.Empty;
     public string Provider { get; set; } = string.Empty;
     public string Model { get; set; } = string.Empty;
     public int? TokensUsed { get; set; }

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace SharpAgent.Application.Videos.Queries.GetByChannel;
 
-public class GetVideosByChannelHandler : IRequestHandler<GetVideosByChannelQuery, List<VideoDto>>
+public class GetVideosByChannelHandler : IRequestHandler<GetVideosByChannelQuery, List<VideoResponse>>
 {
     private readonly IVideoRepository _videoRepository;
     private readonly IMapper _mapper;
@@ -16,9 +16,9 @@ public class GetVideosByChannelHandler : IRequestHandler<GetVideosByChannelQuery
         _mapper = mapper;
     }
 
-    public async Task<List<VideoDto>> Handle(GetVideosByChannelQuery request, CancellationToken cancellationToken)
+    public async Task<List<VideoResponse>> Handle(GetVideosByChannelQuery request, CancellationToken cancellationToken)
     {
         var videos = await _videoRepository.GetByChannel(request.ChannelId);
-        return _mapper.Map<List<VideoDto>>(videos);
+        return _mapper.Map<List<VideoResponse>>(videos);
     }
 }

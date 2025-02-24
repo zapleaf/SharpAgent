@@ -5,7 +5,7 @@ using MediatR;
 
 namespace SharpAgent.Application.Videos.Queries.GetById;
 
-public class GetVideoByIdHandler : IRequestHandler<GetVideoByIdQuery, VideoDto>
+public class GetVideoByIdHandler : IRequestHandler<GetVideoByIdQuery, VideoResponse>
 {
     private readonly IVideoRepository _videoRepository;
     private readonly IMapper _mapper;
@@ -16,9 +16,9 @@ public class GetVideoByIdHandler : IRequestHandler<GetVideoByIdQuery, VideoDto>
         _mapper = mapper;
     }
 
-    public async Task<VideoDto> Handle(GetVideoByIdQuery request, CancellationToken cancellationToken)
+    public async Task<VideoResponse> Handle(GetVideoByIdQuery request, CancellationToken cancellationToken)
     {
         var video = await _videoRepository.Get(request.Id);
-        return _mapper.Map<VideoDto>(video);
+        return _mapper.Map<VideoResponse>(video);
     }
 }

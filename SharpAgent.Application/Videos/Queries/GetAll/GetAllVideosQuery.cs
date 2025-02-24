@@ -3,6 +3,6 @@ using MediatR;
 
 namespace SharpAgent.Application.Videos.Queries.GetAll;
 
-public class GetAllVideosQuery : IRequest<List<VideoDto>>
+public class GetAllVideosQuery : IRequest<List<VideoResponse>>
 {
 }

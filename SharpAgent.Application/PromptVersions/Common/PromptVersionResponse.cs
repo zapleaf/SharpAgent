@@ -1,6 +1,6 @@
 ﻿namespace SharpAgent.Application.PromptVersions.Common;
 
-public class PromptVersionDto
+public class PromptVersionResponse
 {
     public Guid Id { get; set; }
     public string Code { get; set; } = string.Empty;

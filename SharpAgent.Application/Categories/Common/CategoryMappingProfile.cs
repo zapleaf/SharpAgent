@@ -10,14 +10,14 @@ public class CategoryMappingProfile : Profile
 {
     public CategoryMappingProfile()
     {
-        CreateMap<Category, CategoryDto>()
+        CreateMap<Category, CategoryResponse>()
             .ForMember(dest => dest.ChannelCount,
                       opt => opt.MapFrom(src => src.Channels.Count));
 
         CreateMap<CreateCategoryRequest, Category>();
 
-        CreateMap<Category, CategoryDetailsDto>();
+        CreateMap<Category, CategoryDetailsResponse>();
 
-        CreateMap<Channel, CategoryChannelDto>();
+        CreateMap<Channel, CategoryChannelResponse>();
     }
 }

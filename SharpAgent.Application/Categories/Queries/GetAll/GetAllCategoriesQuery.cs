@@ -2,6 +2,6 @@
 
 namespace SharpAgent.Application.Categories.Queries.GetAll;
 
-public class GetAllCategoriesQuery : IRequest<List<CategoryDto>>
+public class GetAllCategoriesQuery : IRequest<List<CategoryResponse>>
 {
 }

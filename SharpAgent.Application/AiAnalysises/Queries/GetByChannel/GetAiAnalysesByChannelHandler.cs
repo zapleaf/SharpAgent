@@ -6,7 +6,7 @@ using SharpAgent.Application.IRepositories;
 
 namespace SharpAgent.Application.AiAnalysises.Queries.GetByChannel;
 
-public class GetAiAnalysesByChannelHandler : IRequestHandler<GetAiAnalysesByChannelQuery, List<AiAnalysisDto>>
+public class GetAiAnalysesByChannelHandler : IRequestHandler<GetAiAnalysesByChannelQuery, List<AiAnalysisResponse>>
 {
     private readonly IAiAnalysisRepository _aiAnalysisRepository;
     private readonly IMapper _mapper;
@@ -17,9 +17,9 @@ public class GetAiAnalysesByChannelHandler : IRequestHandler<GetAiAnalysesByChan
         _mapper = mapper;
     }
 
-    public async Task<List<AiAnalysisDto>> Handle(GetAiAnalysesByChannelQuery request, CancellationToken cancellationToken)
+    public async Task<List<AiAnalysisResponse>> Handle(GetAiAnalysesByChannelQuery request, CancellationToken cancellationToken)
     {
         var analyses = await _aiAnalysisRepository.GetByChannelId(request.ChannelId);
-        return _mapper.Map<List<AiAnalysisDto>>(analyses);
+        return _mapper.Map<List<AiAnalysisResponse>>(analyses);
     }
 }

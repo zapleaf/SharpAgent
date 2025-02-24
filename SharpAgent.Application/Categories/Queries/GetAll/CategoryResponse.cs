@@ -1,6 +1,6 @@
 ﻿namespace SharpAgent.Application.Categories.Queries.GetAll;
 
-public class CategoryDto
+public class CategoryResponse
 {
     public int Id { get; set; }
     public string? Name { get; set; }

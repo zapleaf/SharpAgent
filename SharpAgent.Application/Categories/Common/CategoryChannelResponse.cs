@@ -1,6 +1,6 @@
 ﻿namespace SharpAgent.Application.Categories.Common;
 
-public class CategoryChannelDto
+public class CategoryChannelResponse
 {
     public int Id { get; set; }
     public string? Title { get; set; }

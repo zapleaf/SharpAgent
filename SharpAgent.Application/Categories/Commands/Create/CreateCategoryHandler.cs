@@ -6,7 +6,7 @@ using MediatR;
 
 namespace SharpAgent.Application.Categories.Commands.Create;
 
-public class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, CategoryDto>
+public class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, CategoryResponse>
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IMapper _mapper;
@@ -17,10 +17,10 @@ public class CreateCategoryHandler : IRequestHandler<CreateCategoryCommand, Cate
         _mapper = mapper;
     }
 
-    public async Task<CategoryDto> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<CategoryResponse> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var category = _mapper.Map<Category>(request.Category);
         var result = await _categoryRepository.Create(category);
-        return _mapper.Map<CategoryDto>(result);
+        return _mapper.Map<CategoryResponse>(result);
     }
 }

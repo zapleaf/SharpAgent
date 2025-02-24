@@ -4,7 +4,7 @@ using MediatR;
 
 namespace SharpAgent.Application.YouTube.Queries.SearchChannel;
 
-public class SearchChannelHandler : IRequestHandler<SearchChannelQuery, List<ChannelDto>>
+public class SearchChannelHandler : IRequestHandler<SearchChannelQuery, List<ChannelResponse>>
 {
     private readonly IYouTubeApiService _youTubeService;
 
@@ -13,7 +13,7 @@ public class SearchChannelHandler : IRequestHandler<SearchChannelQuery, List<Cha
         _youTubeService = youTubeService;
     }
 
-    public async Task<List<ChannelDto>> Handle(SearchChannelQuery request, CancellationToken cancellationToken)
+    public async Task<List<ChannelResponse>> Handle(SearchChannelQuery request, CancellationToken cancellationToken)
     {
         return await _youTubeService.ChannelSearch(request.SearchTerm);
     }

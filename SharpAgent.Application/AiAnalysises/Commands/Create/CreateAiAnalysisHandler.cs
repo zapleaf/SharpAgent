@@ -7,7 +7,7 @@ using SharpAgent.Domain.Entities;
 
 namespace SharpAgent.Application.AiAnalysises.Commands.Create;
 
-public class CreateAiAnalysisHandler : IRequestHandler<CreateAiAnalysisCommand, AiAnalysisDto>
+public class CreateAiAnalysisHandler : IRequestHandler<CreateAiAnalysisCommand, AiAnalysisResponse>
 {
     private readonly IAiAnalysisRepository _aiAnalysisRepository;
     private readonly IMapper _mapper;
@@ -18,10 +18,10 @@ public class CreateAiAnalysisHandler : IRequestHandler<CreateAiAnalysisCommand, 
         _mapper = mapper;
     }
 
-    public async Task<AiAnalysisDto> Handle(CreateAiAnalysisCommand request, CancellationToken cancellationToken)
+    public async Task<AiAnalysisResponse> Handle(CreateAiAnalysisCommand request, CancellationToken cancellationToken)
     {
         var analysis = _mapper.Map<AiAnalysis>(request);
         var result = await _aiAnalysisRepository.Create(analysis);
-        return _mapper.Map<AiAnalysisDto>(result);
+        return _mapper.Map<AiAnalysisResponse>(result);
     }
 }

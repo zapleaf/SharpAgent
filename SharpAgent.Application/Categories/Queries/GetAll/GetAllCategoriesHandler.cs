@@ -4,7 +4,7 @@ using MediatR;
 
 namespace SharpAgent.Application.Categories.Queries.GetAll;
 
-public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesQuery, List<CategoryDto>>
+public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesQuery, List<CategoryResponse>>
 {
     private readonly ICategoryRepository _categoryRepository;
     private readonly IMapper _mapper;
@@ -15,9 +15,9 @@ public class GetAllCategoriesHandler : IRequestHandler<GetAllCategoriesQuery, Li
         _mapper = mapper;
     }
 
-    public async Task<List<CategoryDto>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
+    public async Task<List<CategoryResponse>> Handle(GetAllCategoriesQuery request, CancellationToken cancellationToken)
     {
         var categories = await _categoryRepository.GetAllWithChildren();
-        return _mapper.Map<List<CategoryDto>>(categories);
+        return _mapper.Map<List<CategoryResponse>>(categories);
     }
 }

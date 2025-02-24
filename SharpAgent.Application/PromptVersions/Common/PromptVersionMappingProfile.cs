@@ -7,7 +7,7 @@ public class PromptVersionMappingProfile : Profile
 {
     public PromptVersionMappingProfile()
     {
-        CreateMap<PromptVersion, PromptVersionDto>();
-        CreateMap<PromptVersionDto, PromptVersion>();
+        CreateMap<PromptVersion, PromptVersionResponse>();
+        CreateMap<PromptVersionResponse, PromptVersion>();
     }
 }
