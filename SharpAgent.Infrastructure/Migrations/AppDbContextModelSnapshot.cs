@@ -34,7 +34,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("ChannelsId");
 
-                    b.ToTable("CategoryChannel");
+                    b.ToTable("CategoryChannel", (string)null);
                 });
 
             modelBuilder.Entity("EmbeddingDocumentCollections", b =>
@@ -49,7 +49,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("DocumentId");
 
-                    b.ToTable("EmbeddingDocumentCollections");
+                    b.ToTable("EmbeddingDocumentCollections", (string)null);
                 });
 
             modelBuilder.Entity("EmbeddingDocumentTags", b =>
@@ -64,7 +64,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("EmbeddingDocumentTags");
+                    b.ToTable("EmbeddingDocumentTags", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -256,7 +256,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("PromptVersionId");
 
-                    b.ToTable("AiAnalyses");
+                    b.ToTable("AiAnalyses", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.AiSummary", b =>
@@ -311,7 +311,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("VideoId");
 
-                    b.ToTable("AiSummaries");
+                    b.ToTable("AiSummaries", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.Category", b =>
@@ -343,7 +343,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.Channel", b =>
@@ -412,7 +412,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("YTId")
                         .IsUnique();
 
-                    b.ToTable("Channels");
+                    b.ToTable("Channels", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingChunk", b =>
@@ -460,7 +460,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("DocumentId");
 
-                    b.ToTable("EmbeddingChunks");
+                    b.ToTable("EmbeddingChunks", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingCollection", b =>
@@ -496,7 +496,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("EmbeddingCollections");
+                    b.ToTable("EmbeddingCollections", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingDocument", b =>
@@ -558,7 +558,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("EmbeddingDocuments");
+                    b.ToTable("EmbeddingDocuments", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingModel", b =>
@@ -604,7 +604,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmbeddingModels");
+                    b.ToTable("EmbeddingModels", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingTag", b =>
@@ -640,7 +640,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("EmbeddingTags");
+                    b.ToTable("EmbeddingTags", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.PromptVersion", b =>
@@ -684,7 +684,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("Code", "Version")
                         .IsUnique();
 
-                    b.ToTable("PromptVersions");
+                    b.ToTable("PromptVersions", (string)null);
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.User", b =>
@@ -823,7 +823,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("YTId")
                         .IsUnique();
 
-                    b.ToTable("Videos");
+                    b.ToTable("Videos", (string)null);
                 });
 
             modelBuilder.Entity("CategoryChannel", b =>

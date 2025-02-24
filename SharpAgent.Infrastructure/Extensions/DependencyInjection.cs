@@ -59,9 +59,6 @@ public static class DependencyInjection
         services.AddSingleton<YouTubeApiKey>(youtubeApiKey);
         services.AddScoped<IYouTubeApiService, YouTubeApiService>();
 
-        // Register Repositories
-        services.AddTransient<IWorkflowRepository, WorkflowRepository>();
-
         return services;
     }
 }
