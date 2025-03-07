@@ -17,37 +17,13 @@ SharpAgent implements Clean Architecture principles, separating concerns into di
 
 ### Workflow Structure
 
-The workflow system is built around several key entities:
+Originally I setup workflow system where each process would have a workflow id and the various steps would be outlined in JSON. However, after the first version it felt I would spend more time creating a flexible "workflow" that creating actual processes.
 
-1. **AgentWorkflow**
-   - Contains sequence of steps (stored as JSON in `WorkflowSteps`)
-   - Tracks participating `Agent` entities
-   - Maintains collection of `AgentTask` records
-   - Monitors status, current step, and execution times
-
-2. **WorkflowHandler**
-   - Core orchestrator for workflow execution
-   - Discovers available commands via reflection
-   - Maps steps to appropriate services and agents
-   - Manages data flow between steps
-
-3. **WorkflowRepository**
-   - Manages workflow state in database
-   - Tracks execution progress
-   - Records step results
-   - Handles workflow completion
-
-4. **Service Commands**
-   - Tagged with `ServiceCommandAttribute`
-   - Mapped to specific service types
-   - Automatically discovered and registered
-   - Handle individual step execution
-
-## Agent Workflow System
+So this was scrapped and now each process will have its own Handler which will contain any conditions, decisions, and business logic.
 
 ### Core Components
 
-1. **Workflows**
+1. **Handlers**
    - Orchestrate multiple agents working together
    - Define sequence of steps using different services
    - Track execution state and history
@@ -71,9 +47,8 @@ The workflow system is built around several key entities:
 ### Workflow Execution
 
 1. **Initialization**
-   - Client triggers workflow via POST `/api/workflow/{workflowId}`
+   - Client triggers workflow via POST to specific endpoint
    - Optional parameters can be provided
-   - System loads workflow definition and participating agents
 
 2. **Step Processing**
    - Each step associates with:
@@ -82,26 +57,6 @@ The workflow system is built around several key entities:
      - Configuration parameters
    - Results flow between steps
    - Progress is tracked in database
-
-3. **Example Workflow Structure**
-```json
-{
-  "steps": [
-    {
-      "order": 1,
-      "serviceType": "Embedding",
-      "agentRole": "Researcher",
-      "parameters": {}
-    },
-    {
-      "order": 2,
-      "serviceType": "VectorDb",
-      "agentRole": "Analyst",
-      "parameters": {}
-    }
-  ]
-}
-```
 
 ## Key Features
 
