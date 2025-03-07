@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpAgent.Domain", "SharpA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharpAgent.Infrastructure", "SharpAgent.Infrastructure\SharpAgent.Infrastructure.csproj", "{B94D5083-EB07-4023-BDEB-EADE53BD88EF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpAgent.Blazor", "SharpAgent.Blazor\SharpAgent.Blazor.csproj", "{D488B75B-5BBB-438E-A9AB-AFF867A6F5F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B94D5083-EB07-4023-BDEB-EADE53BD88EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B94D5083-EB07-4023-BDEB-EADE53BD88EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B94D5083-EB07-4023-BDEB-EADE53BD88EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D488B75B-5BBB-438E-A9AB-AFF867A6F5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D488B75B-5BBB-438E-A9AB-AFF867A6F5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D488B75B-5BBB-438E-A9AB-AFF867A6F5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D488B75B-5BBB-438E-A9AB-AFF867A6F5F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

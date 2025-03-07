@@ -1,0 +1,147 @@
+.bd-placeholder-img {
+    font-size: 1.125rem;
+    text-anchor: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+}
+
+@media (min-width: 768px) {
+    .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+    }
+}
+
+.b-example-divider {
+    width: 100%;
+    height: 3rem;
+    background-color: rgba(0, 0, 0, .1);
+    border: solid rgba(0, 0, 0, .15);
+    border-width: 1px 0;
+    box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+.b-example-vr {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 100vh;
+}
+
+
+
+.nav-scroller {
+    position: relative;
+    z-index: 2;
+    height: 2.75rem;
+    overflow-y: hidden;
+}
+
+    .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
+
+.bd-mode-toggle {
+    z-index: 1500;
+}
+
+    .bd-mode-toggle .dropdown-menu .active .bi {
+        display: block !important;
+    }
+
+
+.bi {
+    vertical-align: -.125em;
+    fill: currentColor;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+}
+
+:root, [data-bs-theme=light] {
+    --bs-body-line-height: 1.4 !important;
+}
+
+/********************* * Sidebar ************************ */
+
+@media (min-width: 768px) {
+    .sidebar .offcanvas-lg {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 48px;
+    }
+
+    .navbar-search {
+        display: block;
+    }
+}
+
+/* Make the sidebar take full height and add scrolling if needed */
+.sidebar {
+    /*height: calc(100vh - 56px);*/ /* 56px is the typical Bootstrap navbar height */
+    position: sticky;
+    /*top: 56px;*/ /* Match the header height */
+    z-index: 100;
+    overflow-y: auto; /* Allow scrolling within sidebar if content is too tall */
+}
+
+.sidebar .nav-link {
+    font-size: .875rem;
+    font-weight: 500;
+}
+
+    .sidebar .nav-link.active {
+        color: #2470dc;
+    }
+
+.sidebar-heading {
+    font-size: .75rem;
+}
+
+.nav {
+    --bs-nav-link-padding-y: 0.1rem !important;
+}
+
+/****************** * Top Navbar * ************************/
+
+.navbar-brand {
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    /*background-color: rgba(0, 0, 0, .25);*/
+    /*box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);*/
+}
+
+.navbar .form-control {
+    padding: .75rem 1rem;
+}
+
+/* Make the container and row take full height */
+html, body {
+    height: 100%;
+}
+
+/* Apply all dark styles only when dark theme is selected */
+[data-bs-theme=dark] .bg-body-tertiary {
+    background: #141824 !important;
+}
+
+[data-bs-theme=dark] .bg-dark {
+    background-color: #222834 !important;
+}
+
+[data-bs-theme=dark] body {
+    background-color: #0f111a !important;
+}
+/* Apply all dark styles only when dark theme is selected */
+
+/* Ensure main content scrolls if it's too long */
+main {
+    height: 100%;
+    overflow-y: auto;
+}
