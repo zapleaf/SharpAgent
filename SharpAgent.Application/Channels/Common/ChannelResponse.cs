@@ -19,5 +19,4 @@ public class ChannelResponse
     public int AvgViews { get; set; }
     public int TrackedVideos { get; set; } = 0;
     public List<CategoryResponse> Categories { get; set; } = new();
-    public List<VideoResponse> Videos { get; set; } = new();
 }

@@ -2,7 +2,7 @@
 
 public class VideoResponse
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string YTId { get; set; } = string.Empty;
     public string? Title { get; set; }
     public string? Description { get; set; }
@@ -17,7 +17,7 @@ public class VideoResponse
     public string? Notes { get; set; }
 
     // Added channel properties
-    public int? ChannelId { get; set; }
+    public Guid ChannelId { get; set; }
     public string? ChannelTitle { get; set; }
     public ulong? ChannelSubscriberCount { get; set; }
 }

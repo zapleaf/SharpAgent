@@ -2,6 +2,7 @@
 using SharpAgent.Application.IRepositories;
 using SharpAgent.Application.Channels.Common;
 using MediatR;
+using Azure;
 
 namespace SharpAgent.Application.Channels.Queries.GetAll;
 
@@ -18,12 +19,23 @@ public class GetAllChannelsHandler : IRequestHandler<GetAllChannelsQuery, List<C
 
     public async Task<List<ChannelResponse>> Handle(GetAllChannelsQuery request, CancellationToken cancellationToken)
     {
-        var channels = request.IncludeVideos && request.IncludeCategories
-            ? await _channelRepository.GetWithCategoriesAndVideos()
-            : request.IncludeCategories
-                ? await _channelRepository.GetWithCategories()
-                : await _channelRepository.GetAll();
+        try
+        {
+            var channels = request.IncludeVideos && request.IncludeCategories
+                ? await _channelRepository.GetWithCategoriesAndVideos()
+                : request.IncludeCategories
+                    ? await _channelRepository.GetWithCategories()
+                    : await _channelRepository.GetAll();
 
-        return _mapper.Map<List<ChannelResponse>>(channels);
+            var response = _mapper.Map<List<ChannelResponse>>(channels);
+
+            return response;
+        }
+        catch (Exception ex)
+        {
+            string err = ex.Message;
+        }
+
+        return null;
     }
 }

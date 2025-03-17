@@ -1,3 +1,42 @@
+:root,
+[data-bs-theme=light] {
+
+}
+
+[data-bs-theme=dark] {
+    color-scheme: dark;
+}
+
+
+:root {
+    --emphasis-color: #eff2f6;
+    --decaf-blue: #6ea8fe;
+    --btn-hover-color: #fff;
+    --btn-hover-bg: #6ea8fe;
+    --btn-hover-border: #6ea8fe;
+    --bs-body-color: #ffffff;
+    --bs-nav-link-hover-color: #326cc4 !important;
+}
+
+
+
+.btn-outline {
+    --bs-btn-color: #6ea8fe;
+    --bs-btn-border-color: #6ea8fe;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #6ea8fe;
+    --bs-btn-hover-border-color: #6ea8fe;
+    --bs-btn-focus-shadow-rgb: 13, 110, 253;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #6ea8fe;
+    --bs-btn-active-border-color: #6ea8fe;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #6ea8fe;
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: #6ea8fe;
+    --bs-gradient: none;
+}
+
 .bd-placeholder-img {
     font-size: 1.125rem;
     text-anchor: middle;
@@ -27,7 +66,14 @@
     height: 100vh;
 }
 
+.nav-links .nav-link.active {
+    color: var(--emphasis-color);
+}
 
+.nav-links .nav-link {
+    font-weight: 400;
+    font-size: 0.8rem;
+}
 
 .nav-scroller {
     position: relative;
@@ -111,8 +157,8 @@
 /****************** * Top Navbar * ************************/
 
 .navbar-brand {
-    padding-top: .75rem;
-    padding-bottom: .75rem;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
     /*background-color: rgba(0, 0, 0, .25);*/
     /*box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);*/
 }
@@ -144,4 +190,49 @@ html, body {
 main {
     height: 100%;
     overflow-y: auto;
+}
+
+
+.fs-1 {
+    font-size: 4.768371582rem !important;
+}
+
+.fs-2 {
+    font-size: 3.8146972656rem !important;
+}
+
+.fs-3 {
+    font-size: 3.0517578125rem !important;
+}
+
+.fs-4 {
+    font-size: 2.44140625rem !important;
+}
+
+.fs-5 {
+    font-size: 1.953125rem !important;
+}
+
+.fs-6 {
+    font-size: 1.5625rem !important;
+}
+
+.fs-7 {
+    font-size: 1.25rem !important;
+}
+
+.fs-8 {
+    font-size: 1rem !important;
+}
+
+.fs-9 {
+    font-size: 0.8rem !important;
+}
+
+.fs-10 {
+    font-size: 0.64rem !important;
+}
+
+.fs-11 {
+    font-size: 0.512rem !important;
 }

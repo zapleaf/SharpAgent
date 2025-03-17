@@ -1,17 +1,22 @@
 ﻿@inherits LayoutComponentBase
 @layout SharpAgent.Blazor.Components.Layout.MainLayout
 
-<h1>Manage your account</h1>
 
-<div>
-    <h2>Change your account settings</h2>
-    <hr />
-    <div class="row">
-        <div class="col-lg-3">
-            <ManageNavMenu />
-        </div>
-        <div class="col-lg-9">
-            @Body
+
+<div class="row justify-content-center">
+    <div class="col-lg-6 text-center">
+        <p></p>
+        <div>
+            <h4>Manage your account</h4>
+            <hr />
+            <div class="row text-start">
+                <div class="col-lg-3">
+                    <ManageNavMenu />
+                </div>
+                <div class="col-lg-9">
+                    @Body
+                </div>
+            </div>
         </div>
     </div>
 </div>

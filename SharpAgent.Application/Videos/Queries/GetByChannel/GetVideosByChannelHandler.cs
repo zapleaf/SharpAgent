@@ -18,7 +18,17 @@ public class GetVideosByChannelHandler : IRequestHandler<GetVideosByChannelQuery
 
     public async Task<List<VideoResponse>> Handle(GetVideosByChannelQuery request, CancellationToken cancellationToken)
     {
-        var videos = await _videoRepository.GetByChannel(request.ChannelId);
-        return _mapper.Map<List<VideoResponse>>(videos);
+        try
+        {
+            var videos = await _videoRepository.GetByChannel(request.ChannelId);
+            var response = _mapper.Map<List<VideoResponse>>(videos);
+            return response;
+        }
+        catch (Exception ex)
+        {
+            string err = ex.ToString();
+        }
+
+        return null;
     }
 }

@@ -1,0 +1,172 @@
+﻿@page "/categories"
+
+@attribute [Authorize]
+
+@using SharpAgent.Domain.Extensions
+
+@rendermode InteractiveServer
+
+
+    <div class="row">
+    <!-- START Left Nav Menu -->
+    <div class="sidebar col-md-3 col-lg-2 pt-2 px-0 bg-body-tertiary min-vh-100 d-flex flex-column border-end">
+        <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+            <div class="offcanvas-header">
+                <h5 class="offcanvas-title" id="sidebarMenuLabel">SharpAgent</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body d-md-flex flex-column p-0 pt-2 overflow-y-auto">
+                <ul class="nav flex-column">
+                    @foreach (var category in categories)
+                    {
+                        <li class="nav-item">
+                            <button class="nav-link d-flex align-items-center gap-2" @onclick="(() => GetVideos(category))">
+                                @WebUtility.HtmlDecode(category.Name)
+                                <span>&nbsp;(@category.ChannelCount)</span>
+                            </button>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- END Left Nav Menu -->
+    <!-- START of Main Content -->
+    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-2">
+        <div class="content">
+            <!-- START of top section -->
+            <div class="row justify-content-between align-items-end pb-1 mb-1 g-3 border-bottom border-1">
+                <div class="col-12 col-sm-auto">
+                    <h5 class="mb-1">@currentCategory.Name Videos<span class="fs-8 fw-normal text-body-tertiary ms-1">(@VideoCount)</span></h5>
+                </div>
+                <div class="col-12 col-sm-auto">
+                    @if (Loading)
+                    {
+                        <div class="spinner-grow spinner-grow-sm text-success" role="status"></div>
+                        <div class="spinner-grow spinner-grow-sm text-success" role="status"></div>
+                        <div class="spinner-grow spinner-grow-sm text-success" role="status"></div>
+                    }
+                </div>
+                <div class="col-12 col-sm-auto">
+                    <div class="d-flex align-items-center">
+                        <div class="col-auto px-2">
+                            <InputText @bind-Value="@newCategory.Name" class="form-control form-control-sm" placeholder="Category Name" />
+                        </div>
+                        <div class="col-auto px-4">
+                            <InputText @bind-Value="@newCategory.Description" class="form-control form-control-sm" placeholder="Description" />
+                        </div>
+                        <div class="col-auto">
+                            <button class="btn btn-outline btn-sm" @onclick="AddCategory" disabled="@(string.IsNullOrWhiteSpace(newCategory.Name))">Add Category</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-between align-items-end mb-4 g-3">
+                <div class="col-12 col-sm-auto">
+                    <ul class="nav nav-links mx-n2">
+                        <li class="nav-item"><span class="fs-9 fw-semibold">Include: </span></li>
+                        <li class="nav-item"><button class="nav-link px-1 py-1 @(watchedOnly ? "" : "active")" @onclick="ViewAll"><span>all</span></button></li>
+                        <li class="nav-item"><button class="nav-link px-1 py-1 @(watchedOnly ? "active" : "")" @onclick="FilterByWatched"><span>unwatched</span></button></li>
+                        <li class="nav-item ps-3"><span class="fs-9 fw-semibold">Order By:</span></li>
+                        <li class="nav-item"><button class="nav-link px-1 py-1 @(orderby == "newest" ? "active" : "")" @onclick="OrderByNewest"><span>newest</span></button></li>
+                        <li class="nav-item"><button class="nav-link px-1 py-1 @(orderby == "views" ? "active" : "")" @onclick="OrderByViews"><span>views</span></button></li>
+                        <li class="nav-item ps-3"><span class="fs-9 fw-semibold">View:</span></li>
+                        <li class="nav-item"><button class="nav-link px-1 py-1 @(view == "videos" ? "active" : "")" @onclick="ViewVideos"><span>videos</span></button></li>
+                        <li class="nav-item"><button class="nav-link px-1 py-1 @(view == "channels" ? "active" : "")" @onclick="ViewChannels"><span>channels</span></button></li>
+                        <li class="nav-item"><button class="nav-link px-1 py-1 @(view == "outliers" ? "active" : "")" @onclick="ViewOutliers"><span>outliers</span></button></li>
+                    </ul>
+                </div>
+            </div>
+            <!-- END of top section -->
+            <!-- START of Video Loop Content -->
+            @if (Videos?.Count() > 0 && (view == "videos" || view == "outliers"))
+            {
+                <div class="row g-3 mb-9 mt-0">
+                    @foreach (var video in Videos)
+                    {
+                        <div class="col-12 col-sm-4 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
+                            <div class="image-container" style="width: 100%; padding-top: 56%; position: relative;">
+                                <a href=@($"/videos/watch/{video.Id}") target="_blank">
+                                    <img src="@video.ThumbnailUrl" class="img-fluid rounded border border-2" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;" alt="Responsive image">
+                                </a>
+                                <!-- Pill with number -->
+                                <span class="badge rounded-pill text-bg-secondary position-absolute bottom-0 end-0 m-2">
+                                    @(TimeSpan.FromSeconds(video.Duration ?? 0).ToString(@"mm\:ss"))
+                                </span>
+                            </div>
+                            <div class="text-white fw-bold mb-0 mt-2">@WebUtility.HtmlDecode(video.Title)</div>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <div class="fs-9 text-nowrap mb-0">@video.ViewCount.ToEstimateString() (@video.RatioAvgViews.ToString("P0"))</div>
+                                <div class="fs-9 text-nowrap mb-0">@video.PublishedAt.ToTimeAgo()</div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            <!-- END of Video Loop Content -->
+            <!-- START of Channel Loop Content -->
+            @if (Channels?.Count() > 0 && view == "channels")
+            {
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 mb-9 mt-0">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Title</th>
+                                <th scope="col">Videos</th>
+                                <th scope="col">Subs</th>
+                                <th scope="col">Avg Views</th>
+                                <th scope="col">YouTube</th>
+                                <th scope="col">Details</th>
+                                <th scope="col">Videos</th>
+                                <th scope="col">Stats</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var channel in Channels)
+                            {
+                                <tr>
+                                    <td>
+                                        <input class="d-none" id="avatarFile" type="file">
+                                        <label class="cursor-pointer avatar avatar-xl" for="avatarFile">
+                                            <img class="rounded-circle" src="@channel.ThumbnailURL" alt="">
+                                        </label>
+                                    </td>
+                                    <td><h5>@channel.Title</h5></td>
+                                    <td><p class="text-body-secondary">@channel.TrackedVideos</p></td>
+                                    <td><p class="text-body-secondary">@channel.SubscriberCount</p></td>
+                                    <td><p class="text-body-secondary">@channel.AvgViews</p></td>
+                                    <td>
+                                        <a class="btn btn-phoenix-primary btn-sm p-2" href=@($"https://www.youtube.com/channel/{@channel.YTId}/videos") target="_blank">
+                                            <span class="fw-semibold">View</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-phoenix-primary btn-sm p-2" href=@($"/channels/{@channel.Id}/details")>
+                                            <span class="fw-semibold">Details</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-phoenix-primary btn-sm p-2" href=@($"/channels/{@channel.Id}/videos")>
+                                            <span class="fw-semibold">Videos</span>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-phoenix-primary btn-sm p-2" @onclick="(() => UpdateStats(channel.Id))">
+                                            <span class="fw-semibold">Update</span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            <!-- END of Channel Loop Content -->
+
+            <Footer />
+        </div>
+    </main>
+    <!-- END of Main Content -->
+</div>

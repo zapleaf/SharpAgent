@@ -1,0 +1,71 @@
+﻿@page "/channel/add"
+
+@attribute [Authorize]
+
+@rendermode InteractiveServer
+
+
+<nav class="navbar navbar-vertical navbar-expand-lg">
+    <div class="collapse navbar-collapse" id="navbarVerticalCollapse">
+        <div class="navbar-vertical-content">
+            <div class="navbar-nav flex-column" id="navbarVerticalNav">
+                <div class="d-flex flex-column align-items-center gap-3 p-2 mx-3">
+                    <div class="w-100 text-center" style="max-width: 300px;">
+                        <span class="fs-8">
+                            Add A Channel
+                        </span>
+                    </div>
+                    <div class="w-100" style="max-width: 300px;">
+                        <InputText @bind-Value="searchTerm" class="form-control w-100" placeholder="Search" />
+                    </div>
+                    <div class="w-100" style="max-width: 300px;">
+                        <button class="btn btn-primary w-100" @onclick="SearchChannels">Channel Search</button>
+                    </div>
+                    <div class="w-100" style="max-width: 300px;">
+                        @if (IsBusy)
+                        {
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-outline-success btn-sm" type="button">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Loading...</span>
+                                </button>
+                                <button class="btn btn-outline-primary flex-grow-1" type="button">Loading Videos</button>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="content pt-7 px-3">
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xxl-4 g-3 mb-9 mt-0">
+        @foreach (var channel in Channels)
+        {
+            <div class="col">
+                <div class="card h-100 hover-actions-trigger">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-2">
+                            <div class="avatar avatar-xl  me-2">
+                                <img class="rounded-circle " src="@channel.ThumbnailURL">
+                            </div>
+                            <div class="flex-1">
+                                <a class="fw-bold mb-0 text-body-emphasis" href=@($"https://www.youtube.com/channel/{channel.YTId}/videos")>@WebUtility.HtmlDecode(channel.Title)</a>
+                                <p class="text-body-secondary">@WebUtility.HtmlDecode(channel.Description)</p>
+                            </div>
+                        </div>
+                        <div>
+                            <a class="btn btn-sm btn-primary" href=@($"https://www.youtube.com/channel/{channel.YTId}/videos") target="_blank">
+                                <span class="fw-semibold">View</span>
+                            </a>
+                            <button type="button" class="btn btn-sm btn-primary" @onclick="@(() => SaveChannel(channel.YTId))">
+                                <span class="fw-semibold">Track</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

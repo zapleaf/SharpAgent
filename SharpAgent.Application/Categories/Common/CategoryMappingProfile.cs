@@ -12,12 +12,15 @@ public class CategoryMappingProfile : Profile
     {
         CreateMap<Category, CategoryResponse>()
             .ForMember(dest => dest.ChannelCount,
-                      opt => opt.MapFrom(src => src.Channels.Count));
+                      opt => opt.MapFrom(src => src.Channels.Count))
+            .MaxDepth(2);
 
         CreateMap<CreateCategoryRequest, Category>();
 
-        CreateMap<Category, CategoryDetailsResponse>();
+        CreateMap<Category, CategoryDetailsResponse>()
+            .MaxDepth(2);
 
-        CreateMap<Channel, CategoryChannelResponse>();
+        CreateMap<Channel, CategoryChannelResponse>()
+            .MaxDepth(2);
     }
 }

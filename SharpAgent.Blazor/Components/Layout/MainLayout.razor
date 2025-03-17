@@ -1,4 +1,6 @@
-﻿@inherits LayoutComponentBase
+﻿@implements IDisposable
+
+@inherits LayoutComponentBase
 @inject IJSRuntime JSRuntime
 @inject NavigationManager NavigationManager
 
@@ -59,41 +61,35 @@
 
 <header class="navbar border-bottom sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
     <!-- Left Side Logo / Brand -->
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-4 fs-6 text-white" href="#"><span class="text-warning">decaf</span>.io</a>
+    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-4 fs-7 text-white" href="#"><span class="text-warning">decaf</span>.io</a>
 
     <!-- Center Menu - Modified for proper centering -->
-    <div class="container-fluid justify-content-center">
-        <ul class="nav col-12 col-lg-auto mx-auto justify-content-center mb-md-0">
-            <li><a href="#" class="nav-link px-2 text-white">Features</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">Pricing</a></li>
-            <li><a href="#" class="nav-link px-2 text-white">About</a></li>
-        </ul>
-    </div>
+    <NavMenu/>
 
     <!-- Right Side User Menu-->
     <AuthorizeView>
         <Authorized>
             <div class="flex-shrink-0 dropdown mx-3">
-                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle"></a>
+                <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="text-white d-inline-flex">
+                        @context.User.Identity?.Name
+                    </span>
+                    </a>
                 <ul class="dropdown-menu text-small shadow" data-popper-placement="bottom-end" style="position: absolute; inset: 0px 0px auto auto; margin: 0px; transform: translate3d(0px, 34.4px, 0px);">
                     <li><a class="dropdown-item" href="#">New project</a></li>
-                    <li><a class="dropdown-item" href="#">Settings</a></li>
-                    <li><a class="dropdown-item" href="#">Profile</a></li>
-                    <li><hr class="dropdown-divider"></li>
-
                     <li class="dropdown-item">
-                        <NavLink class="nav-link d-flex align-items-center gap-2" href="/Account/Manage">
-                            <svg class="bi"><use xlink:href="#file-earmark-text"></use></svg>
+                        <NavLink class="nav-link d-flex gap-2" href="/Account/Manage">
                             Profile
                         </NavLink>
                     </li>
+                    <li><hr class="dropdown-divider"></li>
                     <li class="dropdown-item">
                         <div class="nav-item">
-                            <form action="Account/Logout" method="post">
+                            <form action="../Account/Logout" method="post">
                                 <AntiforgeryToken />
                                 <input type="hidden" name="ReturnUrl" value="../" />
                                 <button type="submit" class="nav-link">
-                                    <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                                    Logout
                                 </button>
                             </form>
                         </div>
@@ -110,16 +106,14 @@
 </header>
 
 <div class="container-fluid">
-    <div class="row">
-        <NavMenu />
 
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-2">
-            @Body
-        </main>
-    </div>
+        @Body
+
 </div>
 
 @code {
+    private string? currentUrl;
+
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
@@ -135,8 +129,11 @@
 
     protected override void OnInitialized()
     {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+
         // Subscribe to navigation events
         NavigationManager.LocationChanged += HandleLocationChanged;
+
         base.OnInitialized();
     }
 
@@ -147,6 +144,9 @@
             // Small delay to let the DOM update
             await Task.Delay(100);
             await JSRuntime.InvokeVoidAsync("themeHandler.forceUpdate");
+
+            currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+            StateHasChanged();
         }
         catch (Exception ex)
         {
@@ -158,5 +158,10 @@
     {
         // Unsubscribe from navigation events
         NavigationManager.LocationChanged -= HandleLocationChanged;
+    }
+
+    private bool IsActive(string path)
+    {
+        return currentUrl?.StartsWith(path) ?? false;
     }
 }
