@@ -1,9 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-
-using MediatR;
+﻿using MediatR;
 
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 
 using SharpAgent.Application.Channels.Common;

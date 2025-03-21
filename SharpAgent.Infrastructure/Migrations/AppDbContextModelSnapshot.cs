@@ -17,7 +17,7 @@ namespace SharpAgent.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0-rc.2.24474.1")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -34,7 +34,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("ChannelsId");
 
-                    b.ToTable("CategoryChannel", (string)null);
+                    b.ToTable("CategoryChannel");
                 });
 
             modelBuilder.Entity("EmbeddingDocumentCollections", b =>
@@ -49,7 +49,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("DocumentId");
 
-                    b.ToTable("EmbeddingDocumentCollections", (string)null);
+                    b.ToTable("EmbeddingDocumentCollections");
                 });
 
             modelBuilder.Entity("EmbeddingDocumentTags", b =>
@@ -64,7 +64,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("EmbeddingDocumentTags", (string)null);
+                    b.ToTable("EmbeddingDocumentTags");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -256,7 +256,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("PromptVersionId");
 
-                    b.ToTable("AiAnalyses", (string)null);
+                    b.ToTable("AiAnalyses");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.AiSummary", b =>
@@ -284,7 +284,7 @@ namespace SharpAgent.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PromptVersionId")
+                    b.Property<Guid?>("PromptVersionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Provider")
@@ -311,7 +311,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("VideoId");
 
-                    b.ToTable("AiSummaries", (string)null);
+                    b.ToTable("AiSummaries");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.Category", b =>
@@ -343,7 +343,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.Channel", b =>
@@ -412,7 +412,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("YTId")
                         .IsUnique();
 
-                    b.ToTable("Channels", (string)null);
+                    b.ToTable("Channels");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingChunk", b =>
@@ -460,7 +460,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("DocumentId");
 
-                    b.ToTable("EmbeddingChunks", (string)null);
+                    b.ToTable("EmbeddingChunks");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingCollection", b =>
@@ -496,7 +496,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("EmbeddingCollections", (string)null);
+                    b.ToTable("EmbeddingCollections");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingDocument", b =>
@@ -558,7 +558,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.ToTable("EmbeddingDocuments", (string)null);
+                    b.ToTable("EmbeddingDocuments");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingModel", b =>
@@ -604,7 +604,7 @@ namespace SharpAgent.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmbeddingModels", (string)null);
+                    b.ToTable("EmbeddingModels");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.EmbeddingTag", b =>
@@ -640,7 +640,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("EmbeddingTags", (string)null);
+                    b.ToTable("EmbeddingTags");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.PromptVersion", b =>
@@ -684,7 +684,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("Code", "Version")
                         .IsUnique();
 
-                    b.ToTable("PromptVersions", (string)null);
+                    b.ToTable("PromptVersions");
                 });
 
             modelBuilder.Entity("SharpAgent.Domain.Entities.User", b =>
@@ -823,7 +823,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasIndex("YTId")
                         .IsUnique();
 
-                    b.ToTable("Videos", (string)null);
+                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("CategoryChannel", b =>
@@ -946,8 +946,7 @@ namespace SharpAgent.Infrastructure.Migrations
                     b.HasOne("SharpAgent.Domain.Entities.PromptVersion", "PromptVersion")
                         .WithMany("AiSummaries")
                         .HasForeignKey("PromptVersionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("SharpAgent.Domain.Entities.Video", "Video")
                         .WithMany()

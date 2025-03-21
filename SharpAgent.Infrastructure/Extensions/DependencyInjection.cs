@@ -44,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IOpenAIChatService, OpenAIChatService>();
         services.AddTransient<IEmbeddingService, OpenAIEmbeddingService>();
         services.AddTransient<IVectorDbService, PineconeService>();
+        services.AddTransient<ITranscriptService, TranscriptService>();
 
         // Register Repositories
         services.AddScoped<IVideoRepository, VideoRepository>();
