@@ -1,6 +1,7 @@
 ﻿using MediatR;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
 
 using SharpAgent.Application.Channels.Common;
@@ -25,18 +26,19 @@ public partial class Play
     [Parameter]
     public Guid Id { get; set; }
 
-    //private bool isDisabled = true;
     private string updateMessage;
     private VideoResponse video = new();
     private string note = string.Empty;
 
-    //private int videoCount = 0;
+    private bool hasTranscript = false;
+    private string summaryText = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
         if (Id != Guid.Empty)
         {
             await GetVideo(Id);
+            await CheckForExistingSummary();
         }
         else
         {
@@ -44,18 +46,32 @@ public partial class Play
         }
     }
 
-    private async Task UpdateVideos(ChannelResponse channel)
+    private async Task CheckForExistingSummary()
     {
-        var command = new SaveChannelVideosCommand
+        try
         {
-            ChannelYTId = channel.YTId,
-            ChannelId = channel.Id,
-            LastCheckDate = channel.LastCheckDate
-        };
+            var getVideoSummaryQuery = new SharpAgent.Application.AiSummaries.Queries.GetMostRecent.GetMostRecentAiSummaryQuery
+            {
+                VideoId = video.Id
+            };
 
-        var updatedCount = await Mediator.Send(command);
-        updateMessage = $"{updatedCount} added";
-        StateHasChanged();
+            var summary = await Mediator.Send(getVideoSummaryQuery);
+
+            if (summary != null)
+            {
+                if (!summary.Transcript.IsNullOrEmpty())
+                {
+                    summaryText = summary.Summary;
+                    hasTranscript = true;
+                }
+
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error checking for existing summary: {ex.Message}");
+        }
     }
 
     private async Task GetVideo(Guid Id)
@@ -163,6 +179,43 @@ public partial class Play
 
     private async Task CreateSummary()
     {
+        try
+        {
+            updateMessage = "Creating summary...";
+            StateHasChanged();
 
+            // First, check if a summary exists or needs to be created
+            var getVideoSummaryCommand = new SharpAgent.Application.Videos.Commands.GetSummary.GetVideoSummaryCommand
+            {
+                VideoId = video.Id
+            };
+
+            // This will either retrieve an existing summary or create a new one
+            var summary = await Mediator.Send(getVideoSummaryCommand);
+
+            if (summary != null)
+            {
+                updateMessage = "Summary retrieved successfully!";
+                // Store the summary data to display in the UI
+                summaryText = summary.Summary;
+                hasTranscript = !string.IsNullOrEmpty(summary.Transcript);
+
+                // For full implementation, you might want to update the UI state or navigate
+                StateHasChanged();
+            }
+            else
+            {
+                updateMessage = "Failed to create or retrieve summary.";
+            }
+        }
+        catch (Exception ex)
+        {
+            updateMessage = $"Error creating/retrieving summary: {ex.Message}";
+            Console.Error.WriteLine($"Error in CreateSummary: {ex.Message}");
+        }
+        finally
+        {
+            StateHasChanged();
+        }
     }
 }
