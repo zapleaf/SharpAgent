@@ -46,12 +46,12 @@ public class TranscriptService : ITranscriptService
                 subtitlesLanguage = "en",
                 startUrls = new[]
                 {
-                    new
-                    {
-                        url = videoUrl,
-                        method = "GET"
-                    }
+                new
+                {
+                    url = videoUrl,
+                    method = "GET"
                 }
+            }
             };
 
             var content = new StringContent(
@@ -59,14 +59,108 @@ public class TranscriptService : ITranscriptService
                 Encoding.UTF8,
                 "application/json");
 
-            // Send the request to Apify
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.apify.com/v2/acts/streamers~youtube-scraper/run-sync");
-            request.Content = content;
+            var runRequest = new HttpRequestMessage(HttpMethod.Post, "https://api.apify.com/v2/acts/streamers~youtube-scraper/runs");
+            runRequest.Content = content;
 
-            var response = await _httpClient.SendAsync(request);
-            response.EnsureSuccessStatusCode();
+            var runResponse = await _httpClient.SendAsync(runRequest);
+            _logger.LogInformation($"Initial Apify response: {runResponse.StatusCode}");
 
-            var responseContent = await response.Content.ReadAsStringAsync();
+            if (!runResponse.IsSuccessStatusCode)
+            {
+                _logger.LogWarning($"Failed to start scraping job: {runResponse.StatusCode}");
+                return null;
+            }
+
+            // Get the run ID from the response
+            var runResponseContent = await runResponse.Content.ReadAsStringAsync();
+            _logger.LogInformation($"Run response: {runResponseContent}");
+
+            var runData = JsonConvert.DeserializeObject<ApifyRunResponse>(runResponseContent);
+
+            if (runData?.Data?.Id == null)
+            {
+                _logger.LogWarning("Failed to get run ID from Apify response");
+                return null;
+            }
+
+            string runId = runData.Data.Id;
+            _logger.LogInformation($"Started Apify run with ID: {runId}");
+
+            // Poll for the run status
+            return await WaitForRunCompletion(runId, videoUrl);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Error scraping YouTube video {videoUrl}: {ex.Message}");
+            throw;
+        }
+    }
+
+    private async Task<TranscriptResult> WaitForRunCompletion(string runId, string videoUrl)
+    {
+        const int maxAttempts = 30;
+        const int delaySeconds = 5; // Completion tests - 8 to 20 seconds
+
+        for (int attempt = 0; attempt < maxAttempts; attempt++)
+        {
+            try
+            {
+                // Check the run status
+                var statusUrl = $"https://api.apify.com/v2/actor-runs/{runId}";
+                var statusResponse = await _httpClient.GetAsync(statusUrl);
+
+                if (!statusResponse.IsSuccessStatusCode)
+                {
+                    _logger.LogWarning($"Failed to get run status: {statusResponse.StatusCode}");
+                    await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+                    continue;
+                }
+
+                var statusContent = await statusResponse.Content.ReadAsStringAsync();
+                var statusData = JsonConvert.DeserializeObject<ApifyRunStatusResponse>(statusContent);
+
+                _logger.LogInformation($"Run status: {statusData?.Data?.Status}, Attempt: {attempt + 1}/{maxAttempts}");
+
+                if (statusData?.Data?.Status == "SUCCEEDED")
+                {
+                    // Run completed successfully, get the dataset items
+                    return await GetRunResults(runId, videoUrl);
+                }
+                else if (statusData?.Data?.Status == "FAILED" || statusData?.Data?.Status == "ABORTED")
+                {
+                    _logger.LogWarning($"Apify run failed with status: {statusData?.Data?.Status}");
+                    return null;
+                }
+
+                // Still running, wait and try again
+                await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error checking run status: {ex.Message}");
+                await Task.Delay(TimeSpan.FromSeconds(delaySeconds));
+            }
+        }
+
+        _logger.LogWarning($"Timed out waiting for Apify run to complete after {maxAttempts} attempts");
+        return null;
+    }
+
+    private async Task<TranscriptResult> GetRunResults(string runId, string videoUrl)
+    {
+        try
+        {
+            // Get dataset items
+            var datasetUrl = $"https://api.apify.com/v2/actor-runs/{runId}/dataset/items";
+            var datasetResponse = await _httpClient.GetAsync(datasetUrl);
+
+            if (!datasetResponse.IsSuccessStatusCode)
+            {
+                _logger.LogWarning($"Failed to get dataset items: {datasetResponse.StatusCode}");
+                return null;
+            }
+
+            var responseContent = await datasetResponse.Content.ReadAsStringAsync();
             var scraperResponse = JsonConvert.DeserializeObject<List<ApifyScraperResponse>>(responseContent);
 
             if (scraperResponse == null || !scraperResponse.Any())
@@ -77,7 +171,7 @@ public class TranscriptService : ITranscriptService
 
             var videoData = scraperResponse[0];
 
-            // Map the response to our domain model
+            // Map the response to our domain model (same as before)
             var result = new TranscriptResult
             {
                 VideoId = videoData.Id,
@@ -100,8 +194,8 @@ public class TranscriptService : ITranscriptService
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, $"Error scraping YouTube video {videoUrl}: {ex.Message}");
-            throw;
+            _logger.LogError(ex, $"Error getting run results: {ex.Message}");
+            return null;
         }
     }
 
@@ -116,6 +210,31 @@ public class TranscriptService : ITranscriptService
 
         return subtitle?.Srt;
     }
+}
+
+// Classes only used by Transcript Service
+
+public class ApifyRunResponse
+{
+    public ApifyRunData Data { get; set; }
+}
+
+public class ApifyRunData
+{
+    public string Id { get; set; }
+    public string ActId { get; set; }
+    public string ActorId { get; set; }
+}
+
+public class ApifyRunStatusResponse
+{
+    public ApifyRunStatusData Data { get; set; }
+}
+
+public class ApifyRunStatusData
+{
+    public string Id { get; set; }
+    public string Status { get; set; }
 }
 
 public class ApifyScraperResponse

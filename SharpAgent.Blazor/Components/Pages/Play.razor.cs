@@ -126,4 +126,43 @@ public partial class Play
             StateHasChanged();
         }
     }
+
+    private async Task RetrieveTranscript()
+    {
+        try
+        {
+            updateMessage = "Retrieving transcript...";
+            StateHasChanged();
+
+            var command = new SharpAgent.Application.Videos.Commands.RetrieveTranscript.RetrieveVideoTranscriptCommand
+            {
+                VideoId = video.Id
+            };
+
+            var summaryId = await Mediator.Send(command);
+
+            if (summaryId.HasValue)
+            {
+                updateMessage = "Transcript retrieved successfully!";
+            }
+            else
+            {
+                updateMessage = "Failed to retrieve transcript. The video may not have subtitles.";
+            }
+        }
+        catch (Exception ex)
+        {
+            updateMessage = $"Error retrieving transcript: {ex.Message}";
+            Console.Error.WriteLine($"Error in RetrieveTranscript: {ex.Message}");
+        }
+        finally
+        {
+            StateHasChanged();
+        }
+    }
+
+    private async Task CreateSummary()
+    {
+
+    }
 }

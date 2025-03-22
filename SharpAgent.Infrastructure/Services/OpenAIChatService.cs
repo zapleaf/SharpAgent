@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Azure;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 using OpenAI;
@@ -76,6 +75,53 @@ public class OpenAIChatService : IOpenAIChatService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error sending chat completion request");
+            throw;
+        }
+    }
+
+    public async Task<string> GenerateSummaryAsync(string text, int? maxLength = null)
+    {
+        try
+        {
+            // Create a system message that instructs the model to generate a one-paragraph summary
+            List<ChatMessage> messages = new();
+
+            // Add system message with instructions
+            messages.Add(ChatMessage.CreateSystemMessage(
+                "You are a helpful assistant that creates concise, informative summaries. " +
+                "Provide a one paragraph summary that captures the key points of the text."));
+
+            // Add the text to summarize as a user message
+            messages.Add(ChatMessage.CreateUserMessage(text));
+
+            // Configure the options
+            var options = new ChatCompletionOptions
+            {
+                Temperature = 0.3f,  // Lower temperature for more focused responses
+                MaxOutputTokenCount = maxLength ?? 1000
+            };
+
+            // Send the request
+            ClientResult result = await _chatClient.CompleteChatAsync(messages, options);
+
+            // Extract the summary from the response
+            var jsonResponse = result.GetRawResponse().Content.ToString();
+            using JsonDocument doc = JsonDocument.Parse(jsonResponse);
+            var root = doc.RootElement;
+            var choices = root.GetProperty("choices");
+
+            if (choices.GetArrayLength() > 0)
+            {
+                var firstChoice = choices[0];
+                var message = firstChoice.GetProperty("message");
+                return message.GetProperty("content").GetString() ?? string.Empty;
+            }
+
+            return string.Empty;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating summary");
             throw;
         }
     }
