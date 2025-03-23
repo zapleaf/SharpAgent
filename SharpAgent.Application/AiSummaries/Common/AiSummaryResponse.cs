@@ -2,8 +2,8 @@
 
 public class AiSummaryResponse
 {
-    public int Id { get; set; }
-    public int VideoId { get; set; }
+    public Guid Id { get; set; }
+    public Guid VideoId { get; set; }
     public string Title { get; set; } = string.Empty;
     public string Prompt { get; set; } = string.Empty;
     public string Summary { get; set; } = string.Empty;

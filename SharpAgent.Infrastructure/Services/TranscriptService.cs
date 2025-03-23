@@ -208,7 +208,10 @@ public class TranscriptService : ITranscriptService
         var subtitle = subtitles.FirstOrDefault(s => s.Language == "en" && s.Type == "auto_generated")
                      ?? subtitles.FirstOrDefault();
 
-        return subtitle?.Srt;
+        // Canvert SRT into a simpler format for easier reading
+        var simpleSubtitles = Utilities.SrtConverter.ConvertSrtToSimpleFormat(subtitle?.Srt);
+
+        return simpleSubtitles;
     }
 }
 

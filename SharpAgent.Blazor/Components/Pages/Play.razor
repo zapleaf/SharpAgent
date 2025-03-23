@@ -12,131 +12,131 @@
 
     // Function called when YouTube API is ready
     function onYouTubeIframeAPIReady() {
-        console.log('YouTube API Ready');
+    console.log('YouTube API Ready');
 
-        // Wait a moment to ensure DOM is fully loaded
-        setTimeout(initializePlayer, 1000);
+    // Wait a moment to ensure DOM is fully loaded
+    setTimeout(initializePlayer, 1000);
     }
 
     // Initialize the player by creating a new YT.Player instance
     function initializePlayer() {
-        console.log('Initializing player...');
+    console.log('Initializing player...');
 
-        // Get the existing iframe element
-        var iframe = document.getElementById('player');
+    // Get the existing iframe element
+    var iframe = document.getElementById('player');
 
-        if (!iframe) {
-            console.error('Player iframe not found');
-            return;
-        }
+    if (!iframe) {
+    console.error('Player iframe not found');
+    return;
+    }
 
-        // Get the video ID from the iframe src
-        var src = iframe.src;
-        var videoId = extractVideoId(src);
+    // Get the video ID from the iframe src
+    var src = iframe.src;
+    var videoId = extractVideoId(src);
 
-        console.log('Found video ID:', videoId);
+    console.log('Found video ID:', videoId);
 
-        // Create a new div to replace the iframe
-        var newDiv = document.createElement('div');
-        newDiv.id = 'youtube-player-container';
-        iframe.parentNode.replaceChild(newDiv, iframe);
+    // Create a new div to replace the iframe
+    var newDiv = document.createElement('div');
+    newDiv.id = 'youtube-player-container';
+    iframe.parentNode.replaceChild(newDiv, iframe);
 
-        // Create a new player instance
-        youtubePlayer = new YT.Player('youtube-player-container', {
-            videoId: videoId,
-            playerVars: {
-                'enablejsapi': 1,
-                'rel': 0
-            },
-            events: {
-                'onReady': onPlayerReady,
-                'onStateChange': onPlayerStateChange
-            }
-        });
+    // Create a new player instance
+    youtubePlayer = new YT.Player('youtube-player-container', {
+    videoId: videoId,
+    playerVars: {
+    'enablejsapi': 1,
+    'rel': 0
+    },
+    events: {
+    'onReady': onPlayerReady,
+    'onStateChange': onPlayerStateChange
+    }
+    });
     }
 
     // Extract video ID from YouTube URL
     function extractVideoId(url) {
-        var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
-        var match = url.match(regExp);
-        return (match && match[7].length == 11) ? match[7] : null;
+    var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+    var match = url.match(regExp);
+    return (match && match[7].length == 11) ? match[7] : null;
     }
 
     // Called when the player is ready
     function onPlayerReady(event) {
-        console.log('Player ready event fired');
-        console.log('Player state:', event.target.getPlayerState());
-        event.target.playVideo();
+    console.log('Player ready event fired');
+    console.log('Player state:', event.target.getPlayerState());
+    event.target.playVideo();
     }
 
     // Called when player state changes
     function onPlayerStateChange(event) {
-        console.log('Player state changed to:', event.data);
+    console.log('Player state changed to:', event.data);
     }
 
     // Function to get current playback time
     function getCurrentTime() {
-        console.log('getCurrentTime called');
+    console.log('getCurrentTime called');
 
-        if (youtubePlayer && typeof youtubePlayer.getCurrentTime === 'function') {
-            var time = youtubePlayer.getCurrentTime();
-            console.log('Current time:', time);
-            return time;
-        }
+    if (youtubePlayer && typeof youtubePlayer.getCurrentTime === 'function') {
+    var time = youtubePlayer.getCurrentTime();
+    console.log('Current time:', time);
+    return time;
+    }
 
-        console.log('Player not ready or getCurrentTime not available');
-        return 0;
+    console.log('Player not ready or getCurrentTime not available');
+    return 0;
     }
 
     // Check if player is initialized - for debugging
     function isPlayerInitialized() {
-        return {
-            playerExists: !!youtubePlayer,
-            hasGetCurrentTimeMethod: youtubePlayer && typeof youtubePlayer.getCurrentTime === 'function',
-            playerState: youtubePlayer ? youtubePlayer.getPlayerState() : 'No player',
-            currentTime: youtubePlayer && typeof youtubePlayer.getCurrentTime === 'function' ? youtubePlayer.getCurrentTime() : 'N/A'
-        };
+    return {
+    playerExists: !!youtubePlayer,
+    hasGetCurrentTimeMethod: youtubePlayer && typeof youtubePlayer.getCurrentTime === 'function',
+    playerState: youtubePlayer ? youtubePlayer.getPlayerState() : 'No player',
+    currentTime: youtubePlayer && typeof youtubePlayer.getCurrentTime === 'function' ? youtubePlayer.getCurrentTime() : 'N/A'
+    };
     }
 </script>
 
 <style>
     .embed-responsive {
-        position: relative;
-        display: block;
-        width: 100%;
-        padding: 0;
-        overflow: hidden;
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    overflow: hidden;
     }
 
-        .embed-responsive::before {
-            content: "";
-            display: block;
-            padding-top: 56.25%; /* 16:9 aspect ratio */
-        }
+    .embed-responsive::before {
+    content: "";
+    display: block;
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+    }
 
     .embed-responsive-item {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
     }
 
     /* Add these rules to ensure the card properly contains the video */
     .card {
-        overflow: hidden;
+    overflow: hidden;
     }
 
     /* Make sure the YouTube API player also fills the container */
     #youtube-player-container,
     #youtube-player-container iframe {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     }
 </style>
 
@@ -150,10 +150,10 @@
                     <div class="card-body p-sm-2">
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe id="player" class="embed-responsive-item"
-                                    src="@($"https://www.youtube.com/embed/{video.YTId}?enablejsapi=1&rel=0&origin={Uri.EscapeDataString(NavigationManager.BaseUri)}")"
-                                    title="YouTube video player" frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen>
+                            src="@($"https://www.youtube.com/embed/{video.YTId}?enablejsapi=1&rel=0&origin={Uri.EscapeDataString(NavigationManager.BaseUri)}")"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
                             </iframe>
                         </div>
                     </div>
@@ -185,19 +185,28 @@
                                 <div class="col-12 col-sm-auto">
                                     <div class="d-flex align-items-center gap-2">
                                         <div>
-                                            <button type="button" class="btn btn-outline-primary p-2">
+                                            <button type="button" class="btn btn-sm btn-outline">
                                                 <span class="fw-semibold">Watched</span>
                                             </button>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-outline-primary p-2"
-                                                    @onclick="RetrieveTranscript"
-                                                    disabled="@hasTranscript">
-                                                <span class="fw-semibold">@(hasTranscript ? "Transcript Available" : "Get Transcript")</span>
-                                            </button>
+                                            @if (hasTranscript)
+                                            {
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" disabled>
+                                                    <span class="fw-semibold">Transcript Available</span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-outline"
+                                                        @onclick="RetrieveTranscript">
+                                                    <span class="fw-semibold">Get Transcript</span>
+                                                </button>
+                                            }
+
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-outline-primary p-2" @onclick="CreateSummary">
+                                            <button type="button" class="btn btn-sm btn-outline" @onclick="CreateSummary">
                                                 <span class="fw-semibold">Summary</span>
                                             </button>
                                         </div>
@@ -206,7 +215,7 @@
                                 <div class="col-12 col-sm-auto">
                                     @if (!string.IsNullOrEmpty(updateMessage))
                                     {
-                                        <div class="alert alert-info py-1 mb-0">@updateMessage</div>
+                                        <div class="alert alert-success py-1 mb-0">@updateMessage</div>
                                     }
                                 </div>
                             </div>
@@ -218,7 +227,14 @@
             <div class="col-md-4 px-2">
                 @if (hasTranscript)
                 {
-                    <h4 class="mb-1 text-body-highlight fs-xxl-6">Video Summary:</h4>
+                    <h6 class="mb-1 text-body-highlight fs-xxl-6">Video Transcript:</h6>
+                    <div class="mb-4">
+                        <textarea class="form-control" readonly rows="6">@transcriptText</textarea>
+                    </div>
+                }
+                @if (hasSummary)
+                {
+                    <h6 class="mb-1 text-body-highlight fs-xxl-6">Video Summary:</h6>
                     <div class="mb-4">
                         <textarea class="form-control" readonly rows="8">@summaryText</textarea>
                     </div>
@@ -229,7 +245,7 @@
                 </div>
                 <h6 class="mb-1 text-body-highlight fs-xxl-6">Add a New Note:</h6>
                 <div class="mb-0">
-                    <textarea class="form-control" @bind="note" id="exampleTextarea" rows="5"></textarea>
+                    <textarea class="form-control" @bind="note" id="exampleTextarea" rows="3"></textarea>
                 </div>
                 <div class="text-end mt-3">
                     <button type="button" class="btn btn-outline-primary p-2" @onclick="AddNote">Add Note</button>

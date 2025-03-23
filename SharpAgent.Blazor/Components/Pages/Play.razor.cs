@@ -9,6 +9,7 @@ using SharpAgent.Application.Videos.Commands.UpdateNotes;
 using SharpAgent.Application.Videos.Common;
 using SharpAgent.Application.Videos.Queries.GetById;
 using SharpAgent.Application.YouTube.Commands.SaveVideos;
+using SharpAgent.Domain.Entities;
 
 namespace SharpAgent.Blazor.Components.Pages;
 
@@ -31,6 +32,9 @@ public partial class Play
     private string note = string.Empty;
 
     private bool hasTranscript = false;
+    private string transcriptText = string.Empty;
+
+    private bool hasSummary = false;
     private string summaryText = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -55,14 +59,20 @@ public partial class Play
                 VideoId = video.Id
             };
 
-            var summary = await Mediator.Send(getVideoSummaryQuery);
+            var aiSummary = await Mediator.Send(getVideoSummaryQuery);
 
-            if (summary != null)
+            if (aiSummary != null)
             {
-                if (!summary.Transcript.IsNullOrEmpty())
+                if (!aiSummary.Transcript.IsNullOrEmpty())
                 {
-                    summaryText = summary.Summary;
+                    transcriptText = aiSummary.Transcript;
                     hasTranscript = true;
+                }
+
+                if (!aiSummary.Summary.IsNullOrEmpty())
+                {
+                    summaryText = aiSummary.Summary;
+                    hasSummary = true;
                 }
 
                 StateHasChanged();
@@ -160,10 +170,11 @@ public partial class Play
             if (summaryId.HasValue)
             {
                 updateMessage = "Transcript retrieved successfully!";
+                await CheckForExistingSummary();
             }
             else
             {
-                updateMessage = "Failed to retrieve transcript. The video may not have subtitles.";
+                updateMessage = "Failed to retrieve transcript.";
             }
         }
         catch (Exception ex)

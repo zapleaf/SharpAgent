@@ -6,6 +6,8 @@ using MediatR;
 
 namespace SharpAgent.Application.YouTube.Commands.SaveVideos;
 
+// Consider moving Extension methods to a shared project.
+
 public class SaveChannelVideosHandler : IRequestHandler<SaveChannelVideosCommand, int>
 {
     private readonly IVideoRepository _videoRepository;

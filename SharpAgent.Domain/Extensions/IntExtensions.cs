@@ -1,5 +1,7 @@
 ﻿namespace SharpAgent.Domain.Extensions;
 
+// Consider moving Extension methods to a shared project.
+
 public static class IntExtensions
 {
     public static string ToEstimateString(this int number)

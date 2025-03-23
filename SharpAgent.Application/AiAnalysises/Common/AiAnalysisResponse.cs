@@ -2,8 +2,8 @@
 
 public class AiAnalysisResponse
 {
-    public int Id { get; set; }
-    public int ChannelId { get; set; }
+    public Guid Id { get; set; }
+    public Guid ChannelId { get; set; }
     public string AnalysisType { get; set; } = string.Empty;
     public string Title { get; set; } = string.Empty;
     public string Prompt { get; set; } = string.Empty;
