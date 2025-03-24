@@ -142,7 +142,7 @@
 
 <!-- START of Main Content -->
 <div class="content">
-    @if (video?.Id != Guid.Empty)
+    @if (Video?.Id != Guid.Empty)
     {
         <div class="row gx-lg-9 mt-3">
             <div class="col-md-8 px-2">
@@ -150,7 +150,7 @@
                     <div class="card-body p-sm-2">
                         <div class="embed-responsive embed-responsive-16by9">
                             <iframe id="player" class="embed-responsive-item"
-                            src="@($"https://www.youtube.com/embed/{video.YTId}?enablejsapi=1&rel=0&origin={Uri.EscapeDataString(NavigationManager.BaseUri)}")"
+                            src="@($"https://www.youtube.com/embed/{Video.YTId}?enablejsapi=1&rel=0&origin={Uri.EscapeDataString(NavigationManager.BaseUri)}")"
                             title="YouTube video player" frameborder="0"
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen>
@@ -165,18 +165,18 @@
                         <div class="card-body p-2 p-sm-2">
                             <div class="mb-2 border-bottom">
                                 <div class="col-12">
-                                    <h5 class="text-white line-clamp-2 mb-0 mt-0">@WebUtility.HtmlDecode(video.Title)</h5>
+                                    <h5 class="text-white line-clamp-2 mb-0 mt-0">@WebUtility.HtmlDecode(Video.Title)</h5>
                                     <div class="d-flex align-items-center mt-2 mb-2">
-                                        <h5 class="text-body text-nowrap mb-0">@video.ChannelTitle</h5>
+                                        <h5 class="text-body text-nowrap mb-0">@Video.ChannelTitle</h5>
                                         <h6 class="text-body fw-normal text-nowrap mb-0">
-                                            @if (video.ChannelSubscriberCount < 0)
+                                            @if (Video.ChannelSubscriberCount < 0)
                                             {
-                                                <text>&nbsp; -&nbsp; @video.ChannelSubscriberCount.ToEstimateString() Subs</text>
+                                                <text>&nbsp; -&nbsp; @Video.ChannelSubscriberCount.ToEstimateString() Subs</text>
                                             }
                                         </h6>
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center mt-2 mb-2">
-                                        <h6 class="text-body fw-normal text-nowrap mb-0">@video.ViewCount.ToEstimateString() Views - @video.PublishedAt.ToTimeAgo() - @video.Duration.ToMinuteString()</h6>
+                                        <h6 class="text-body fw-normal text-nowrap mb-0">@Video.ViewCount.ToEstimateString() Views - @Video.PublishedAt.ToTimeAgo() - @Video.Duration.ToMinuteString()</h6>
                                     </div>
                                 </div>
                             </div>
@@ -203,12 +203,20 @@
                                                     <span class="fw-semibold">Get Transcript</span>
                                                 </button>
                                             }
-
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-sm btn-outline" @onclick="CreateSummary">
-                                                <span class="fw-semibold">Summary</span>
-                                            </button>
+                                            @if (hasSummary)
+                                            {
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" disabled>
+                                                    <span class="fw-semibold">Summary Available</span>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" class="btn btn-sm btn-outline" @onclick="SummarizeTranscript">
+                                                    <span class="fw-semibold">Summarize Transcript</span>
+                                                </button>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -241,7 +249,7 @@
                 }
                 <h6 class="mb-1 text-body-highlight fs-xxl-6">Current Notes:</h6>
                 <div class="mb-4">
-                    <textarea class="form-control" @bind="video.Notes" id="exampleTextarea" rows="5"></textarea>
+                    <textarea class="form-control" @bind="Video.Notes" id="exampleTextarea" rows="5"></textarea>
                 </div>
                 <h6 class="mb-1 text-body-highlight fs-xxl-6">Add a New Note:</h6>
                 <div class="mb-0">

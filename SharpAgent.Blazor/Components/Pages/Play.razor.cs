@@ -1,9 +1,10 @@
 ﻿using MediatR;
 
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.JSInterop;
-
+using SharpAgent.Application.AiSummaries.Common;
 using SharpAgent.Application.Channels.Common;
 using SharpAgent.Application.Videos.Commands.UpdateNotes;
 using SharpAgent.Application.Videos.Common;
@@ -27,8 +28,12 @@ public partial class Play
     [Parameter]
     public Guid Id { get; set; }
 
+    // Main Variables
+    private VideoResponse Video { get; set; } = new();
+    private AiSummaryResponse AiSummary { get; set; } = new();
+
+    // UI variables
     private string updateMessage;
-    private VideoResponse video = new();
     private string note = string.Empty;
 
     private bool hasTranscript = false;
@@ -42,36 +47,36 @@ public partial class Play
         if (Id != Guid.Empty)
         {
             await GetVideo(Id);
-            await CheckForExistingSummary();
+            await CheckForSummaryAndTranscript();
         }
         else
         {
-            video = new();
+            Video = new();
         }
     }
 
-    private async Task CheckForExistingSummary()
+    private async Task CheckForSummaryAndTranscript()
     {
         try
         {
             var getVideoSummaryQuery = new SharpAgent.Application.AiSummaries.Queries.GetMostRecent.GetMostRecentAiSummaryQuery
             {
-                VideoId = video.Id
+                VideoId = Video.Id
             };
 
-            var aiSummary = await Mediator.Send(getVideoSummaryQuery);
+            AiSummary = await Mediator.Send(getVideoSummaryQuery);
 
-            if (aiSummary != null)
+            if (AiSummary != null)
             {
-                if (!aiSummary.Transcript.IsNullOrEmpty())
+                if (!AiSummary.Transcript.IsNullOrEmpty())
                 {
-                    transcriptText = aiSummary.Transcript;
+                    transcriptText = AiSummary.Transcript;
                     hasTranscript = true;
                 }
 
-                if (!aiSummary.Summary.IsNullOrEmpty())
+                if (!AiSummary.Summary.IsNullOrEmpty())
                 {
-                    summaryText = aiSummary.Summary;
+                    summaryText = AiSummary.Summary;
                     hasSummary = true;
                 }
 
@@ -87,7 +92,7 @@ public partial class Play
     private async Task GetVideo(Guid Id)
     {
         var query = new GetVideoByIdQuery { Id = Id };
-        video = await Mediator.Send(query);
+        Video = await Mediator.Send(query);
         StateHasChanged();
     }
 
@@ -118,13 +123,13 @@ public partial class Play
                 var stampedNote = $"{TimeSpan.FromSeconds(timestamp):hh\\:mm\\:ss} - {note}";
 
                 // Rest of your existing code
-                var updatedNotes = string.IsNullOrEmpty(video.Notes)
+                var updatedNotes = string.IsNullOrEmpty(Video.Notes)
                     ? stampedNote
-                    : $"{video.Notes}\n{stampedNote}";
+                    : $"{Video.Notes}\n{stampedNote}";
 
                 var command = new UpdateVideoNotesCommand
                 {
-                    VideoId = video.Id,
+                    VideoId = Video.Id,
                     Notes = updatedNotes
                 };
 
@@ -132,7 +137,7 @@ public partial class Play
 
                 if (success)
                 {
-                    video.Notes = updatedNotes;
+                    Video.Notes = updatedNotes;
                     note = string.Empty;
                     updateMessage = "Note saved successfully!";
                 }
@@ -162,7 +167,7 @@ public partial class Play
 
             var command = new SharpAgent.Application.Videos.Commands.RetrieveTranscript.RetrieveVideoTranscriptCommand
             {
-                VideoId = video.Id
+                VideoId = Video.Id
             };
 
             var summaryId = await Mediator.Send(command);
@@ -170,7 +175,7 @@ public partial class Play
             if (summaryId.HasValue)
             {
                 updateMessage = "Transcript retrieved successfully!";
-                await CheckForExistingSummary();
+                await CheckForSummaryAndTranscript();
             }
             else
             {
@@ -188,7 +193,7 @@ public partial class Play
         }
     }
 
-    private async Task CreateSummary()
+    private async Task SummarizeTranscript()
     {
         try
         {
@@ -196,27 +201,26 @@ public partial class Play
             StateHasChanged();
 
             // First, check if a summary exists or needs to be created
-            var getVideoSummaryCommand = new SharpAgent.Application.Videos.Commands.GetSummary.GetVideoSummaryCommand
+            var summarizeTranscriptCommand = new SharpAgent.Application.Videos.Commands.SummarizeTranscript.SummarizeVideoTranscriptCommand
             {
-                VideoId = video.Id
+                AiSummaryId = AiSummary.Id
             };
 
-            // This will either retrieve an existing summary or create a new one
-            var summary = await Mediator.Send(getVideoSummaryCommand);
+            // This will create a summary and save to the provided aisummary record
+            var summary = await Mediator.Send(summarizeTranscriptCommand);
 
             if (summary != null)
             {
-                updateMessage = "Summary retrieved successfully!";
-                // Store the summary data to display in the UI
-                summaryText = summary.Summary;
-                hasTranscript = !string.IsNullOrEmpty(summary.Transcript);
+                updateMessage = "Transcript summarized successfully!";
 
-                // For full implementation, you might want to update the UI state or navigate
+                // Update UI from database
+                await CheckForSummaryAndTranscript();
+
                 StateHasChanged();
             }
             else
             {
-                updateMessage = "Failed to create or retrieve summary.";
+                updateMessage = "Failed to create summary.";
             }
         }
         catch (Exception ex)

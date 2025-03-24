@@ -42,7 +42,7 @@ public class SummarizeVideoTranscriptHandler : IRequestHandler<SummarizeVideoTra
             }
 
             // 3. Prepare the prompt context for summarization
-            string promptContext = $"This is a transcript from a YouTube video. Please summarize the main topics and key points discussed in this video:\n\n{aiSummary.Transcript}";
+            string promptContext = $"This is a transcript from a YouTube video. Please summarize the main topics and key points discussed in this video. Try to be concise and eliminate any unnecessary words:\n\n{aiSummary.Transcript}";
 
             // 4. Generate the summary using the simplified method
             string summary = await _chatService.GenerateSummaryAsync(promptContext, 800);
