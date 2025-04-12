@@ -19,14 +19,10 @@ public class YouTubeApiService : IYouTubeApiService
 {
     private readonly YouTubeService _youTubeService;
     private readonly IMapper _mapper;
-    private readonly IVideoRepository _videoRepository;
-    private readonly IChannelRepository _channelRepository;
 
-    public YouTubeApiService(YouTubeApiKey youTubeApiKey, IMapper mapper, IChannelRepository channelRepository, IVideoRepository videoRepository)
+    public YouTubeApiService(YouTubeApiKey youTubeApiKey, IMapper mapper)
     {
         _mapper = mapper;
-        _channelRepository = channelRepository;
-        _videoRepository = videoRepository;
 
         _youTubeService = new YouTubeService(new BaseClientService.Initializer()
         {
